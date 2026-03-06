@@ -1,0 +1,3 @@
+[submodule "adkcode"]
+	path = adkcode
+	url = https://github.com/monthop-gmail/adkcode.git
