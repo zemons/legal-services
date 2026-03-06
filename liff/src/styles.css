@@ -1,0 +1,224 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f5f5f5;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 16px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+/* Form */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+input[type="text"],
+input[type="tel"],
+select,
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  background: #fff;
+  -webkit-appearance: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #06c755;
+  box-shadow: 0 0 0 2px rgba(6, 199, 85, 0.15);
+}
+
+textarea {
+  resize: vertical;
+}
+
+input[type="file"] {
+  font-size: 14px;
+}
+
+.hint {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.file-list {
+  margin-bottom: 16px;
+}
+
+.file-item {
+  font-size: 13px;
+  padding: 6px 10px;
+  background: #e8f5e9;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: #06c755;
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #eee;
+  color: #333;
+}
+
+.btn-success {
+  background: #06c755;
+  color: #fff;
+}
+
+.btn-warning {
+  background: #ff9800;
+  color: #fff;
+}
+
+.btn-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.btn-group .btn {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+/* Success */
+.success-box {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.success-icon {
+  font-size: 48px;
+  color: #06c755;
+  margin-bottom: 16px;
+}
+
+.success-box h1 {
+  margin-bottom: 12px;
+}
+
+.success-box p {
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.success-box .btn {
+  margin-top: 24px;
+}
+
+/* Document Viewer */
+.doc-title {
+  font-size: 18px;
+  margin: 12px 0;
+}
+
+.doc-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 16px;
+}
+
+.doc-content {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.doc-content pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.doc-warning {
+  background: #fff3e0;
+  border: 1px solid #ffcc02;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 13px;
+  color: #e65100;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* Loading / Error */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #888;
+}
+
+.error-box {
+  text-align: center;
+  padding: 40px;
+  color: #d32f2f;
+}

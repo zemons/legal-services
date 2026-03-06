@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Extend CRM Lead Form -->
+    <record id="crm_lead_view_form_legal" model="ir.ui.view">
+        <field name="name">crm.lead.form.legal</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='lead_partner']" position="after">
+                <group string="Legal Case Info" name="legal_case_info">
+                    <group>
+                        <field name="case_type"/>
+                        <field name="case_status"/>
+                        <field name="opposing_party"/>
+                    </group>
+                    <group>
+                        <field name="court_id"/>
+                        <field name="statute_deadline"/>
+                        <field name="line_user_id"/>
+                    </group>
+                </group>
+                <group string="AI Summary" name="ai_summary" attrs="{'invisible': [('case_summary', '=', False)]}">
+                    <field name="case_summary" nolabel="1"/>
+                </group>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_court_dates" type="object"
+                        class="oe_stat_button" icon="fa-gavel">
+                    <field name="court_date_count" widget="statinfo" string="Court Dates"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Extend CRM Lead Tree -->
+    <record id="crm_lead_view_tree_legal" model="ir.ui.view">
+        <field name="name">crm.lead.tree.legal</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_leads"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="case_type" optional="show"/>
+                <field name="case_status" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Extend CRM Lead Search -->
+    <record id="crm_lead_view_search_legal" model="ir.ui.view">
+        <field name="name">crm.lead.search.legal</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_crm_case_leads_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='myactivities']" position="after">
+                <separator/>
+                <filter string="Civil" name="filter_civil" domain="[('case_type', '=', 'civil')]"/>
+                <filter string="Criminal" name="filter_criminal" domain="[('case_type', '=', 'criminal')]"/>
+                <filter string="Family" name="filter_family" domain="[('case_type', '=', 'family')]"/>
+                <filter string="Labor" name="filter_labor" domain="[('case_type', '=', 'labor')]"/>
+                <separator/>
+                <filter string="Statute Deadline This Month" name="filter_statute_deadline"
+                        domain="[('statute_deadline', '&gt;=', (context_today()).strftime('%%Y-%%m-01')),
+                                 ('statute_deadline', '&lt;', (context_today() + relativedelta(months=1)).strftime('%%Y-%%m-01'))]"/>
+            </xpath>
+            <xpath expr="//group" position="inside">
+                <filter string="Case Type" name="group_case_type" context="{'group_by': 'case_type'}"/>
+                <filter string="Case Status" name="group_case_status" context="{'group_by': 'case_status'}"/>
+                <filter string="Court" name="group_court" context="{'group_by': 'court_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

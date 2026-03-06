@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="legal_court_date_view_form" model="ir.ui.view">
+        <field name="name">legal.court.date.form</field>
+        <field name="model">legal.court.date</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="lead_id"/>
+                            <field name="date_time"/>
+                            <field name="purpose"/>
+                        </group>
+                        <group>
+                            <field name="court_id"/>
+                            <field name="room"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="legal_court_date_view_tree" model="ir.ui.view">
+        <field name="name">legal.court.date.tree</field>
+        <field name="model">legal.court.date</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="date_time"/>
+                <field name="lead_id"/>
+                <field name="court_id"/>
+                <field name="purpose"/>
+                <field name="room"/>
+            </list>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="line_notification_view_form" model="ir.ui.view">
+        <field name="name">line.notification.form</field>
+        <field name="model">line.notification</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="line_user_id"/>
+                            <field name="lead_id"/>
+                        </group>
+                        <group>
+                            <field name="notification_type"/>
+                            <field name="sent_at"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="message"/>
+                        <field name="error_message" attrs="{'invisible': [('state', '!=', 'failed')]}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="line_notification_view_tree" model="ir.ui.view">
+        <field name="name">line.notification.tree</field>
+        <field name="model">line.notification</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="create_date"/>
+                <field name="partner_id"/>
+                <field name="lead_id"/>
+                <field name="notification_type"/>
+                <field name="state" decoration-success="state == 'sent'" decoration-danger="state == 'failed'" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+</odoo>

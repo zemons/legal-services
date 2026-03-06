@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="court_civil_south" model="legal.court">
+            <field name="name">ศาลแพ่งกรุงเทพใต้</field>
+            <field name="court_type">civil</field>
+        </record>
+        <record id="court_criminal_south" model="legal.court">
+            <field name="name">ศาลอาญากรุงเทพใต้</field>
+            <field name="court_type">criminal</field>
+        </record>
+        <record id="court_labor_central" model="legal.court">
+            <field name="name">ศาลแรงงานกลาง</field>
+            <field name="court_type">labor</field>
+        </record>
+        <record id="court_family_central" model="legal.court">
+            <field name="name">ศาลเยาวชนและครอบครัวกลาง</field>
+            <field name="court_type">family</field>
+        </record>
+        <record id="court_supreme" model="legal.court">
+            <field name="name">ศาลฎีกา</field>
+            <field name="court_type">supreme</field>
+        </record>
+    </data>
+</odoo>
