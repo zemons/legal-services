@@ -6,9 +6,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 AI-powered online law firm platform using LINE OA as main channel. Core AI engine is `adkcode/` (Google ADK + Gemini). See CONCEPT.md for full design.
 
+**Architecture: 2 services only** — Odoo 18 (handles everything: CRM, LINE webhook, LIFF pages) + adkcode (AI agents + RAG).
+No separate Node.js backend or React LIFF app. LIFF pages are Odoo website/portal views.
+
 ## Key Files
 
-- `CONCEPT.md` — master design doc (UX per role, LIFF plan, Odoo modules, document strategy)
+- `CONCEPT.md` — master design doc (UX per role, LIFF pages, Odoo modules, document strategy)
 - `ARCHITECTURE.md` — system diagram and data flows
 - `AGENTS.md` — legal AI agent instructions loaded by adkcode
 - `RAG_QUESTIONS.md` — pending decisions before RAG development starts
@@ -31,6 +34,7 @@ Replace coder/reviewer/tester with:
 - `legal_advisor` — answer questions using RAG, cite ฎีกา/กฎหมาย
 - `doc_drafter` — draft contracts/documents from templates
 - `intake_analyst` — analyze case intake → create Odoo lead
+- `ocr_legal_doc` — OCR รูปถ่ายเอกสารกฎหมาย → ดึง metadata → จัด format Markdown + YAML frontmatter
 
 ## RAG Modification Plan
 
@@ -49,11 +53,24 @@ data/
 └── cases/      ← per case_id, not indexed in RAG
 ```
 
-## Odoo Modules
+## Odoo Modules (3 custom modules)
 
-Two custom modules to write:
-- `legal_case` — extends crm.lead with case_type, case_status, court_id, statute_deadline, court_dates, line_user_id
-- `line_integration` — LINE webhook endpoint, push notifications, LINE user ↔ partner mapping
+- `legal_case` — extends crm.lead with case_type, case_status, court_id, statute_deadline, court_dates
+- `line_integration` — LINE webhook controller, push notifications, LINE user ↔ partner mapping, adkcode API connector
+- `legal_liff` — website/portal pages for LIFF (intake form, document viewer, case status, appointment, lawyer dashboard, capture ฎีกา)
+
+## LIFF Pages (Odoo website/portal)
+
+LIFF opens in LINE in-app browser → points to Odoo routes:
+- `/liff/intake` — intake form
+- `/liff/document/<id>` — document viewer + approve/revise
+- `/liff/status/<id>` — case status timeline
+- `/liff/appointment` — booking calendar
+- `/liff/cases` — lawyer case dashboard
+- `/liff/schedule` — lawyer schedule
+- `/liff/capture` — ถ่ายรูปฎีกา/เอกสาร → OCR → ตรวจ metadata → เข้า RAG
+
+Uses LIFF SDK via `<script>` tag for LINE profile. Auth via LINE user_id → partner mapping.
 
 ## Environment Variables
 
@@ -61,13 +78,10 @@ Two custom modules to write:
 GOOGLE_API_KEY=
 ADKCODE_MODEL_SMART=gemini-2.5-flash
 ADKCODE_MODEL_FAST=gemini-2.0-flash
+ADKCODE_URL=http://adkcode:8000
 LINE_CHANNEL_ACCESS_TOKEN=
 LINE_CHANNEL_SECRET=
-ODOO_URL=
-ODOO_DB=
-ODOO_USER=
-ODOO_PASSWORD=
-RAG_COLLECTION_PATH=./data/legal_index
+LINE_LIFF_ID=
 ```
 
 ## Running adkcode

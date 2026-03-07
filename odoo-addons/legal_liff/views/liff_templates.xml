@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Base LIFF Layout (standalone, no Odoo chrome) -->
+    <template id="liff_base_layout" name="LIFF Base Layout">
+        <html>
+            <head>
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+                <title><t t-esc="page_title or 'Legal Service'"/></title>
+                <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+                <style>
+                    * { box-sizing: border-box; margin: 0; padding: 0; }
+                    body {
+                        font-family: 'Noto Sans Thai', sans-serif;
+                        background: #f5f6fa;
+                        color: #2C3E50;
+                        -webkit-text-size-adjust: 100%;
+                    }
+                    .liff-container {
+                        max-width: 480px;
+                        margin: 0 auto;
+                        padding: 16px;
+                        background: #fff;
+                        min-height: 100vh;
+                    }
+                    .liff-header {
+                        text-align: center;
+                        padding: 20px 0 10px;
+                    }
+                    .liff-header h2 {
+                        font-size: 22px;
+                        font-weight: 700;
+                        margin-bottom: 4px;
+                    }
+                    .liff-subtitle {
+                        color: #7f8c8d;
+                        font-size: 14px;
+                    }
+                    .liff-field {
+                        margin-bottom: 16px;
+                    }
+                    .liff-field label {
+                        display: block;
+                        font-size: 14px;
+                        font-weight: 600;
+                        margin-bottom: 6px;
+                    }
+                    .liff-field input,
+                    .liff-field select,
+                    .liff-field textarea {
+                        width: 100%;
+                        padding: 12px;
+                        border: 1.5px solid #dfe6e9;
+                        border-radius: 10px;
+                        font-size: 16px;
+                        font-family: 'Noto Sans Thai', sans-serif;
+                        background: #f8f9fa;
+                        -webkit-appearance: none;
+                    }
+                    .liff-field input:focus,
+                    .liff-field select:focus,
+                    .liff-field textarea:focus {
+                        border-color: #2ECC71;
+                        outline: none;
+                        background: #fff;
+                    }
+                    .liff-field textarea {
+                        resize: vertical;
+                        min-height: 120px;
+                    }
+                    .liff-field select {
+                        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%237f8c8d'/%3E%3C/svg%3E");
+                        background-repeat: no-repeat;
+                        background-position: right 12px center;
+                        padding-right: 36px;
+                    }
+                    .liff-btn {
+                        display: block;
+                        width: 100%;
+                        padding: 14px;
+                        background: #2ECC71;
+                        color: #fff;
+                        border: none;
+                        border-radius: 10px;
+                        font-size: 16px;
+                        font-weight: 700;
+                        font-family: 'Noto Sans Thai', sans-serif;
+                        cursor: pointer;
+                        margin-top: 8px;
+                    }
+                    .liff-btn:active { background: #27ae60; }
+                    .liff-btn-close {
+                        background: #95a5a6;
+                        margin-top: 24px;
+                    }
+                    .liff-btn-close:active { background: #7f8c8d; }
+                    .liff-error {
+                        background: #fdecea;
+                        color: #c0392b;
+                        padding: 12px;
+                        border-radius: 10px;
+                        font-size: 14px;
+                        margin-bottom: 16px;
+                    }
+                    .liff-success {
+                        text-align: center;
+                        padding: 60px 20px;
+                    }
+                    .liff-success-icon {
+                        width: 80px;
+                        height: 80px;
+                        line-height: 80px;
+                        border-radius: 50%;
+                        background: #2ECC71;
+                        color: #fff;
+                        font-size: 40px;
+                        margin: 0 auto 20px;
+                    }
+                    .liff-success h2 {
+                        font-size: 24px;
+                        margin-bottom: 8px;
+                    }
+                    .liff-ref {
+                        font-size: 16px;
+                        margin: 12px 0;
+                    }
+                    .text-danger { color: #e74c3c; }
+                </style>
+            </head>
+            <body>
+                <t t-raw="0"/>
+            </body>
+        </html>
+    </template>
+
+    <!-- Intake Form Page -->
+    <template id="liff_intake_page" name="LIFF Intake Form">
+        <t t-call="legal_liff.liff_base_layout">
+            <t t-set="page_title">ปรึกษาทนายความ</t>
+
+            <div class="liff-container">
+                <div class="liff-header">
+                    <h2>ปรึกษาทนายความ</h2>
+                    <p class="liff-subtitle">กรอกข้อมูลเบื้องต้นเพื่อรับคำปรึกษา</p>
+                </div>
+
+                <t t-if="error">
+                    <div class="liff-error"><t t-esc="error"/></div>
+                </t>
+
+                <form action="/liff/intake/submit" method="post" class="liff-form">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <input type="hidden" name="line_user_id" id="line_user_id" value=""/>
+
+                    <div class="liff-field">
+                        <label>ชื่อ-นามสกุล <span class="text-danger">*</span></label>
+                        <input type="text" name="name" id="name" required=""
+                               placeholder="กรอกชื่อ-นามสกุล"
+                               t-att-value="values.get('name', '') if values else ''"/>
+                    </div>
+
+                    <div class="liff-field">
+                        <label>เบอร์โทรศัพท์</label>
+                        <input type="tel" name="phone"
+                               placeholder="0xx-xxx-xxxx"
+                               t-att-value="values.get('phone', '') if values else ''"/>
+                    </div>
+
+                    <div class="liff-field">
+                        <label>ประเภทคดี <span class="text-danger">*</span></label>
+                        <select name="case_type" required="">
+                            <option value="">-- เลือกประเภทคดี --</option>
+                            <t t-foreach="case_types" t-as="ct">
+                                <option t-att-value="ct[0]"
+                                        t-att-selected="values.get('case_type') == ct[0] if values else False">
+                                    <t t-esc="ct[1]"/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+
+                    <div class="liff-field">
+                        <label>รายละเอียดปัญหา <span class="text-danger">*</span></label>
+                        <textarea name="description" rows="5" required=""
+                                  placeholder="อธิบายปัญหาของคุณ เช่น ข้อเท็จจริง สิ่งที่ต้องการให้ทนายช่วย"><t t-if="values" t-esc="values.get('description', '')"/></textarea>
+                    </div>
+
+                    <button type="submit" class="liff-btn">ส่งข้อมูล</button>
+                </form>
+            </div>
+
+            <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+            <script>
+                (async function() {
+                    try {
+                        await liff.init({ liffId: '0000000000-xxxxxxxx' });
+                        if (liff.isLoggedIn()) {
+                            var profile = await liff.getProfile();
+                            document.getElementById('line_user_id').value = profile.userId;
+                            var nameField = document.getElementById('name');
+                            if (!nameField.value) {
+                                nameField.value = profile.displayName;
+                            }
+                        }
+                    } catch(e) {
+                        console.log('LIFF init:', e);
+                    }
+                })();
+            </script>
+        </t>
+    </template>
+
+    <!-- Intake Success Page -->
+    <template id="liff_intake_success" name="LIFF Intake Success">
+        <t t-call="legal_liff.liff_base_layout">
+            <t t-set="page_title">รับเรื่องแล้ว</t>
+
+            <div class="liff-container">
+                <div class="liff-success">
+                    <div class="liff-success-icon">&#10004;</div>
+                    <h2>รับเรื่องแล้ว</h2>
+                    <p>ขอบคุณคุณ <strong><t t-esc="name"/></strong></p>
+                    <p class="liff-ref">เลขที่อ้างอิง: <strong>#<t t-esc="lead.id"/></strong></p>
+                    <p class="liff-subtitle">ทนายความจะตรวจสอบข้อมูลและติดต่อกลับโดยเร็วค่ะ</p>
+
+                    <button class="liff-btn liff-btn-close" onclick="closeLiff()">ปิด</button>
+                </div>
+            </div>
+
+            <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+            <script>
+                function closeLiff() {
+                    try {
+                        if (typeof liff !== 'undefined' &amp;&amp; liff.isInClient()) {
+                            liff.closeWindow();
+                        } else {
+                            window.close();
+                        }
+                    } catch(e) {
+                        window.close();
+                    }
+                }
+            </script>
+        </t>
+    </template>
+
+</odoo>

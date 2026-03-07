@@ -16,6 +16,7 @@
     'depends': ['crm', 'calendar'],
     'data': [
         'security/ir.model.access.csv',
+        'security/legal_case_rules.xml',
         'data/case_type_data.xml',
         'views/crm_lead_views.xml',
         'views/court_views.xml',

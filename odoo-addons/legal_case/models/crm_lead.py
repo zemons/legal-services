@@ -39,6 +39,11 @@ class CrmLead(models.Model):
     court_date_count = fields.Integer(string='Court Dates', compute='_compute_court_date_count')
     case_summary = fields.Text(string='AI Case Summary')
     line_user_id = fields.Char(string='LINE User ID', related='partner_id.line_user_id', store=True)
+    collaborator_ids = fields.Many2many(
+        'res.users', 'crm_lead_collaborator_rel', 'lead_id', 'user_id',
+        string='Collaborators',
+        help='ทนายที่ร่วมดูแลคดีนี้',
+    )
 
     @api.depends('court_date_ids')
     def _compute_court_date_count(self):

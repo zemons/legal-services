@@ -33,6 +33,8 @@ class LineWebhookController(http.Controller):
                 self._handle_follow(event)
             elif event_type == 'message':
                 self._handle_message(event)
+            elif event_type == 'postback':
+                self._handle_postback(event)
 
         return {'status': 'ok'}
 
@@ -63,9 +65,81 @@ class LineWebhookController(http.Controller):
 
     def _handle_message(self, event):
         line_user_id = event.get('source', {}).get('userId')
+        reply_token = event.get('replyToken')
         message = event.get('message', {})
+        msg_type = message.get('type')
+        msg_text = message.get('text', '')
+
         _logger.info(
-            'LINE message from %s: type=%s',
+            'LINE message from %s: type=%s text=%s',
             line_user_id[:8] if line_user_id else 'unknown',
-            message.get('type'),
+            msg_type,
+            msg_text[:50] if msg_text else '',
         )
+
+        if not reply_token:
+            return
+
+        if msg_type == 'text' and msg_text:
+            # TODO: เรียก adkcode AI agent เมื่อ deploy แล้ว
+            self._reply_message(reply_token, [
+                {
+                    "type": "text",
+                    "text": (
+                        f"ได้รับคำถามของคุณแล้วค่ะ:\n\"{msg_text}\"\n\n"
+                        "ขณะนี้ระบบ AI กำลังอยู่ระหว่างการพัฒนา "
+                        "ทนายความจะติดต่อกลับโดยเร็วค่ะ"
+                    )
+                }
+            ])
+        elif msg_type == 'image':
+            self._reply_message(reply_token, [
+                {
+                    "type": "text",
+                    "text": "ได้รับรูปภาพแล้วค่ะ ระบบ OCR กำลังอยู่ระหว่างการพัฒนา"
+                }
+            ])
+
+    def _handle_postback(self, event):
+        data = event.get('postback', {}).get('data', '')
+        reply_token = event.get('replyToken')
+        if not reply_token:
+            return
+
+        if data == 'action=ask_question':
+            self._reply_message(reply_token, [
+                {
+                    "type": "text",
+                    "text": (
+                        "พิมพ์คำถามกฎหมายของคุณลงในช่องแชทด้านล่างได้เลยค่ะ\n"
+                        "AI จะตอบพร้อมอ้างอิงกฎหมาย/ฎีกาที่เกี่ยวข้อง\n\n"
+                        "ตัวอย่างคำถาม:\n"
+                        "- ถูกเลิกจ้างไม่เป็นธรรม เรียกค่าชดเชยได้ไหม\n"
+                        "- สัญญาเช่าหมดแล้ว เจ้าของไม่คืนเงินมัดจำ\n"
+                        "- อยากทำพินัยกรรม ต้องมีพยานกี่คน"
+                    )
+                }
+            ])
+        else:
+            _logger.info('Unhandled postback: %s', data)
+
+    def _reply_message(self, reply_token, messages):
+        access_token = request.env['ir.config_parameter'].sudo().get_param(
+            'line_integration.channel_access_token', '')
+        if not access_token:
+            _logger.warning('LINE access token not configured')
+            return
+        import requests as req
+        resp = req.post(
+            'https://api.line.me/v2/bot/message/reply',
+            headers={
+                'Authorization': f'Bearer {access_token}',
+                'Content-Type': 'application/json',
+            },
+            json={
+                'replyToken': reply_token,
+                'messages': messages,
+            },
+        )
+        if resp.status_code != 200:
+            _logger.error('LINE reply failed: %s %s', resp.status_code, resp.text)

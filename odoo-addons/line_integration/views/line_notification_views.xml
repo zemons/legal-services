@@ -23,7 +23,7 @@
                     </group>
                     <group>
                         <field name="message"/>
-                        <field name="error_message" attrs="{'invisible': [('state', '!=', 'failed')]}"/>
+                        <field name="error_message" invisible="state != 'failed'"/>
                     </group>
                 </sheet>
             </form>

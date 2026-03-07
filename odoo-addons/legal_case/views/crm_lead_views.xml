@@ -18,9 +18,10 @@
                         <field name="court_id"/>
                         <field name="statute_deadline"/>
                         <field name="line_user_id"/>
+                        <field name="collaborator_ids" widget="many2many_tags"/>
                     </group>
                 </group>
-                <group string="AI Summary" name="ai_summary" attrs="{'invisible': [('case_summary', '=', False)]}">
+                <group string="AI Summary" name="ai_summary" invisible="not case_summary">
                     <field name="case_summary" nolabel="1"/>
                 </group>
             </xpath>
@@ -52,7 +53,10 @@
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.view_crm_case_leads_filter"/>
         <field name="arch" type="xml">
-            <xpath expr="//filter[@name='myactivities']" position="after">
+            <xpath expr="//filter[@name='inactive']" position="after">
+                <separator/>
+                <filter string="My Cases" name="filter_my_cases" domain="['|', ('user_id', '=', uid), ('collaborator_ids', 'in', uid)]"/>
+                <filter string="Shared with Me" name="filter_shared" domain="[('collaborator_ids', 'in', uid)]"/>
                 <separator/>
                 <filter string="Civil" name="filter_civil" domain="[('case_type', '=', 'civil')]"/>
                 <filter string="Criminal" name="filter_criminal" domain="[('case_type', '=', 'criminal')]"/>
@@ -63,7 +67,7 @@
                         domain="[('statute_deadline', '&gt;=', (context_today()).strftime('%%Y-%%m-01')),
                                  ('statute_deadline', '&lt;', (context_today() + relativedelta(months=1)).strftime('%%Y-%%m-01'))]"/>
             </xpath>
-            <xpath expr="//group" position="inside">
+            <xpath expr="//filter[@name='source']" position="after">
                 <filter string="Case Type" name="group_case_type" context="{'group_by': 'case_type'}"/>
                 <filter string="Case Status" name="group_case_status" context="{'group_by': 'case_status'}"/>
                 <filter string="Court" name="group_court" context="{'group_by': 'court_id'}"/>

@@ -59,8 +59,7 @@
 |-------|-----------|
 | AI Agent | adkcode (Google ADK + Gemini) |
 | RAG Engine | adkcode rag.py (ดัดแปลงรองรับ PDF) |
-| LINE Bot | Node.js + @line/bot-sdk |
-| LIFF | React |
-| Backend API | Node.js (Express) |
-| CRM / Billing | Odoo |
-| Deploy | Docker Compose |
+| LINE Bot | Odoo controller + LINE Messaging API |
+| LIFF | Odoo website/portal pages (QWeb + OWL) |
+| CRM / Billing | Odoo 18 |
+| Deploy | Docker Compose (Odoo + adkcode) |

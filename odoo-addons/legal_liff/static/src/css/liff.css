@@ -1,0 +1,146 @@
+/* LIFF Pages — mobile-first for LINE in-app browser */
+
+.liff-container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 16px;
+    font-family: 'Noto Sans Thai', 'Helvetica Neue', sans-serif;
+    background: #fff;
+    min-height: 100vh;
+}
+
+.liff-header {
+    text-align: center;
+    padding: 20px 0 10px;
+}
+
+.liff-header h2 {
+    color: #2C3E50;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.liff-subtitle {
+    color: #7f8c8d;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Form */
+.liff-form {
+    padding: 0 4px;
+}
+
+.liff-field {
+    margin-bottom: 16px;
+}
+
+.liff-field label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2C3E50;
+    margin-bottom: 6px;
+}
+
+.liff-field input,
+.liff-field select,
+.liff-field textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px solid #dfe6e9;
+    border-radius: 10px;
+    font-size: 16px;
+    background: #f8f9fa;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    box-sizing: border-box;
+}
+
+.liff-field input:focus,
+.liff-field select:focus,
+.liff-field textarea:focus {
+    border-color: #2ECC71;
+    outline: none;
+    background: #fff;
+}
+
+.liff-field textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.liff-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%237f8c8d'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+}
+
+/* Buttons */
+.liff-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: #2ECC71;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s;
+}
+
+.liff-btn:hover,
+.liff-btn:active {
+    background: #27ae60;
+}
+
+.liff-btn-close {
+    background: #95a5a6;
+    margin-top: 24px;
+}
+
+.liff-btn-close:hover,
+.liff-btn-close:active {
+    background: #7f8c8d;
+}
+
+/* Success page */
+.liff-success {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.liff-success-icon {
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    border-radius: 50%;
+    background: #2ECC71;
+    color: #fff;
+    font-size: 40px;
+    margin: 0 auto 20px;
+}
+
+.liff-success h2 {
+    color: #2C3E50;
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.liff-ref {
+    font-size: 16px;
+    color: #2C3E50;
+    margin: 12px 0;
+}
+
+/* Alert */
+.alert-danger {
+    border-radius: 10px;
+    font-size: 14px;
+    margin-bottom: 16px;
+}

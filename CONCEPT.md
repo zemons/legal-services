@@ -15,6 +15,7 @@
 - อธิบายขั้นตอน / อายุความ / ค่าธรรมเนียม
 - คัดกรองประเภทคดี แนะนำทนายที่เหมาะสม
 - Draft เอกสารเบื้องต้น (สัญญา, หนังสือทวงถาม, พินัยกรรม)
+- OCR ถ่ายรูปฎีกา/เอกสารกฎหมาย → ดึง metadata → เก็บเข้า RAG
 
 ### AI + ทนาย
 - รับ intake จากลูกค้า → วิเคราะห์ → สรุป → สร้าง lead ใน Odoo
@@ -67,11 +68,13 @@
 |-------|-----------|
 | AI Agent | adkcode (Google ADK + Gemini) |
 | RAG Engine | adkcode rag.py (ดัดแปลงรองรับ PDF) |
-| LINE Bot | Node.js + @line/bot-sdk |
-| LIFF | React |
-| Backend API | Node.js (Express) |
-| CRM / Billing | Odoo |
-| Deploy | Docker Compose |
+| LINE Bot | Odoo controller + LINE Messaging API |
+| LIFF | Odoo website/portal pages (OWL + QWeb templates) |
+| CRM / Billing | Odoo 18 |
+| Deploy | Docker Compose (Odoo + adkcode) |
+
+> **Design Decision**: ไม่ใช้ Node.js backend หรือ React LIFF แยก
+> LIFF pages เป็น Odoo website pages — ลดจำนวน service, ใช้ ORM ตรง, auth ผ่าน Odoo session
 
 ---
 
@@ -155,22 +158,28 @@ required_fields: [ชื่อผู้ให้เช่า, ชื่อผู
 
 ```
 คุยกับ AI ก่อน (LINE chat)
-→ อยากปรึกษาทนาย กด button → LIFF Intake Form (4-5 ฟิลด์)
+→ อยากปรึกษาทนาย กด button → LIFF → Odoo /liff/intake (4-5 ฟิลด์)
 → ถ่ายรูปเอกสาร (optional) / ส่งไฟล์ใน LINE ทีหลัง
 → รับ push notification ใน LINE
-→ ดู status กด link → LIFF Case Status
+→ ดู status กด link → LIFF → Odoo /liff/status
 ```
 
 ### ทนายความ (Lawyer)
 - อยู่ศาลบ่อย → ใช้มือถือเป็นหลักระหว่างวัน
 - ต้องการ AI summary ของ case ทันที
+- เจอฎีกาที่ศาล → ถ่ายรูปเก็บเข้าคลังได้ทันที
 - นั่ง PC ที่สำนักงานได้ช่วงเช้า/เย็น
 
 ```
 มี lead ใหม่ → LINE push + AI summary 3 บรรทัด
 → [รับเคส] [ส่งต่อ] [นัดปรึกษา] (Quick Reply)
-→ [ดูรายละเอียด] → LIFF Case Dashboard
-→ update status / นัดหมาย → sync Odoo → bot แจ้งลูกค้าเอง
+→ [ดูรายละเอียด] → LIFF → Odoo /liff/cases
+→ update status / นัดหมาย → Odoo ORM → bot แจ้งลูกค้าเอง
+
+เจอฎีกา / เอกสารกฎหมาย
+→ ส่งรูปใน LINE chat → bot ถาม [เก็บเข้าคลัง] [ไม่ใช่]
+→ หรือกด [ถ่ายรูปฎีกา] → LIFF → Odoo /liff/capture
+→ OCR + AI ดึง metadata → ทนายตรวจ → เข้า RAG
 ```
 
 ### Admin / Staff
@@ -186,53 +195,65 @@ required_fields: [ชื่อผู้ให้เช่า, ชื่อผู
 |---|-----------|-----------|
 | 1 | พิมพ์ถามคำถามกฎหมาย | LINE Chat |
 | 2 | เลือกประเภทคดีเบื้องต้น | LINE Rich Menu / Carousel |
-| 3 | กรอกข้อมูลคดี | LIFF Intake Form |
-| 4 | ถ่ายรูปเอกสารกระดาษ | LIFF camera input |
+| 3 | กรอกข้อมูลคดี | Odoo /liff/intake (via LIFF) |
+| 4 | ถ่ายรูปเอกสารกระดาษ | Odoo /liff/intake camera input |
 | 5 | ส่งไฟล์ PDF/รูป | LINE Chat (forward file) |
-| 6 | ยืนยัน/ขอแก้ไข draft เอกสาร | LIFF Document Viewer + ปุ่ม |
-| 7 | จองนัดหมาย | LIFF Appointment (ปฏิทิน) |
-| 8 | ชำระเงิน | LIFF Payment (QR PromptPay) |
+| 6 | ยืนยัน/ขอแก้ไข draft เอกสาร | Odoo /liff/document (via LIFF) |
+| 7 | จองนัดหมาย | Odoo /liff/appointment (via LIFF) |
+| 8 | ชำระเงิน | Odoo /liff/payment (via LIFF) |
 | 9 | ตอบ yes/no | LINE Quick Reply |
 
 ### ทนายความ
 | # | Interface | เครื่องมือ |
 |---|-----------|-----------|
 | 10 | รับ/ปฏิเสธเคสใหม่ | LINE Quick Reply |
-| 11 | ดู list คดี + รับเคส | LIFF Case Dashboard |
-| 12 | Update status คดี | LIFF Case Dashboard |
-| 13 | นัดหมายลูกค้า/ศาล | LIFF Schedule |
-| 14 | ตรวจสอบ/แก้ไข draft เอกสาร | Odoo Web (PC) |
-| 15 | Billing / invoice | Odoo Web (PC) |
+| 11 | ดู list คดี + รับเคส | Odoo /liff/cases (via LIFF) |
+| 12 | Update status คดี | Odoo /liff/cases (via LIFF) |
+| 13 | นัดหมายลูกค้า/ศาล | Odoo /liff/schedule (via LIFF) |
+| 14 | ถ่ายรูปฎีกา → OCR → เข้า RAG | Odoo /liff/capture (via LIFF) หรือ LINE chat ส่งรูป |
+| 15 | ตรวจสอบ/แก้ไข draft เอกสาร | Odoo Web backend (PC) |
+| 16 | Billing / invoice | Odoo Web backend (PC) |
 
 ### Admin / Staff
 | # | Interface | เครื่องมือ |
 |---|-----------|-----------|
-| 16 | Upload ฎีกา/กฎหมายเข้า RAG | Web Admin Portal (PC) |
-| 17 | Tag metadata เอกสาร | Web Admin Portal form |
-| 18 | จัดการ template สัญญา | Web Admin Portal (PC) |
+| 16 | Upload ฎีกา/กฎหมายเข้า RAG | Odoo Web backend (PC) |
+| 17 | Tag metadata เอกสาร | Odoo Web backend (PC) |
+| 18 | จัดการ template สัญญา | Odoo Web backend (PC) |
 | 19 | ดู/assign lead ให้ทนาย | Odoo CRM |
-| 20 | ส่ง draft กลับลูกค้า | Odoo / Web Portal |
+| 20 | ส่ง draft กลับลูกค้า | Odoo Web backend (PC) |
 
 ---
 
-## LIFF Apps (ตาม Role)
+## LIFF Pages (Odoo Website/Portal)
 
-### Client LIFF
-| # | ชื่อ | หน้าที่ | Phase |
-|---|------|---------|-------|
-| 1 | Intake Form | กรอกข้อมูลคดี + ถ่ายรูปเอกสาร (optional) | 1 |
-| 2 | Document Viewer | ดู draft, ยืนยัน/ขอแก้ไข, download PDF | 1 |
-| 3 | Case Status | timeline คดี, วันนัดศาล | 2 |
-| 4 | Appointment | จองนัดปรึกษา, sync Odoo Calendar | 2 |
-| 5 | Payment | ดู invoice, ชำระ PromptPay | 3 |
+LIFF เปิดใน LINE in-app browser → ชี้ไปหน้า Odoo website/portal
+ใช้ LIFF SDK (`@line/liff`) ผ่าน `<script>` tag เพื่อดึง LINE profile
 
-### Lawyer LIFF
-| # | ชื่อ | หน้าที่ | Phase |
-|---|------|---------|-------|
-| 6 | Case Dashboard | ดู list คดี, รับเคส, update status | 2 |
-| 7 | Schedule | นัดลูกค้า, บันทึกวันนัดศาล | 2 |
+### Client Pages (via LIFF URL)
+| # | Route | หน้าที่ | Phase |
+|---|-------|---------|-------|
+| 1 | `/liff/intake` | กรอกข้อมูลคดี + ถ่ายรูปเอกสาร (optional) | 1 |
+| 2 | `/liff/document/<id>` | ดู draft, ยืนยัน/ขอแก้ไข, download PDF | 1 |
+| 3 | `/liff/status/<id>` | timeline คดี, วันนัดศาล | 2 |
+| 4 | `/liff/appointment` | จองนัดปรึกษา, sync Odoo Calendar | 2 |
+| 5 | `/liff/payment/<id>` | ดู invoice, ชำระ PromptPay | 3 |
 
-**Admin → Web Admin Portal (PC) ไม่ใช่ LIFF**
+### Lawyer Pages (via LIFF URL)
+| # | Route | หน้าที่ | Phase |
+|---|-------|---------|-------|
+| 6 | `/liff/cases` | ดู list คดี, รับเคส, update status | 2 |
+| 7 | `/liff/schedule` | นัดลูกค้า, บันทึกวันนัดศาล | 2 |
+| 8 | `/liff/capture` | ถ่ายรูปฎีกา/เอกสาร → OCR → ตรวจ metadata → เข้า RAG | 2 |
+
+**Admin → Odoo backend views (PC) ไม่ใช่ LIFF**
+
+### Implementation
+- Odoo module: `legal_liff`
+- Template engine: QWeb (server-side) + OWL (client-side interactivity)
+- Mobile-responsive: ออกแบบสำหรับ LINE in-app browser
+- Auth: LINE user_id → Odoo partner mapping (ไม่ต้อง login แยก)
+- LIFF SDK: โหลดผ่าน `<script>` ใน base template เพื่อ `liff.getProfile()`
 
 ### งานที่ใช้ LINE Chat แทน LIFF
 | งาน | ช่องทาง |
@@ -257,7 +278,7 @@ required_fields: [ชื่อผู้ให้เช่า, ชื่อผู
 | Documents | เก็บไฟล์เอกสารคดี |
 | Discuss | chat ภายในทีม |
 
-### Custom Modules (เขียนเพิ่ม 2 modules)
+### Custom Modules (เขียนเพิ่ม 3 modules)
 
 **Module 1: `legal_case`** — extend crm.lead
 ```python
@@ -275,10 +296,27 @@ line_user_id     # เชื่อม LINE user ↔ res.partner
 ```python
 # features
 # - REST endpoint รับ webhook จาก LINE bot
+# - เรียก adkcode AI agent ผ่าน HTTP
 # - ส่ง push notification เมื่อ status เปลี่ยน
 # - ส่ง push เมื่อมีนัดหมายใหม่
 # - map LINE user_id ↔ res.partner
 # - log ประวัติการแจ้งเตือน
+```
+
+**Module 3: `legal_liff`** — LIFF pages เป็น Odoo website/portal views
+```python
+# features
+# - /liff/intake        — intake form (QWeb template)
+# - /liff/document/<id> — document viewer + approve/revise
+# - /liff/status/<id>   — case status timeline
+# - /liff/appointment   — booking calendar
+# - /liff/payment/<id>  — invoice + PromptPay
+# - /liff/cases         — lawyer case dashboard
+# - /liff/schedule      — lawyer schedule
+# - /liff/capture       — ถ่ายรูปฎีกา → OCR → ตรวจ metadata → เข้า RAG
+# - LIFF SDK integration via <script> tag
+# - Mobile-responsive templates (LINE in-app browser)
+# - LINE user_id → partner auth (no separate login)
 ```
 
 ---
