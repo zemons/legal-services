@@ -1,0 +1,168 @@
+# Odoo Modules — modules จาก apps.odoo.com ที่เกี่ยวข้องกับ project
+#
+# relevance: high = น่าใช้/ศึกษา, medium = อ้างอิง, low = ไม่จำเป็น
+
+# ============================================================
+# LAW CASE MANAGEMENT — จัดการคดี
+# ============================================================
+
+- name: Odoo Law Management System (Webkul)
+  url: https://apps.odoo.com/apps/modules/18.0/wk_law_management
+  version: "18.0"
+  price: $96.95
+  license: Proprietary
+  developer: Webkul Software Pvt. Ltd.
+  relevance: high
+  notes: >
+    ครบสุด: case, trial, court, judge, evidence, lawyer, dashboard
+    มี model structure ที่น่าศึกษา — trial/hearing, evidence, billing
+    เทียบกับ legal_case ของเรา: เพิ่ม trial mgmt, evidence mgmt, legal billing
+
+- name: Legal Case Management (Cybrosys)
+  url: https://apps.odoo.com/apps/modules/18.0/legal_case_management
+  version: "18.0"
+  license: LGPL-3
+  developer: Cybrosys Techno Solutions
+  code_lines: 2457
+  depends: [contacts, mail, hr, account, website]
+  relevance: high
+  notes: >
+    LGPL-3 (open source แก้ไขได้!) — ข้อได้เปรียบเหนือ Webkul (Proprietary)
+    Features: access control (admin/lawyer/clerk), lawyer wages,
+    case registration (backend + portal), evidence & trial tracking,
+    invoicing 4 แบบ (per-trial, per-case, settlement, full),
+    portal client self-service, reports (evidence, case progress)
+    depends website — ตรงกับ project เราที่ใช้ website module สำหรับ LIFF
+    น่าศึกษา model structure เพื่อปรับเข้ากับ legal_case module ของเรา
+
+- name: Law & Legal Practice Management (BrowseInfo)
+  url: https://apps.odoo.com/apps/modules/17.0/bi_law_management
+  version: "17.0"
+  license: Proprietary
+  relevance: medium
+  notes: คล้าย wk_law_management — ยังไม่มี 18.0
+
+- name: Law Management System (DevIntelle)
+  url: https://apps.odoo.com/apps/modules/17.0/dev_law_management
+  version: "17.0"
+  license: Proprietary
+  relevance: medium
+  notes: มี matter, hearing, billing — ยังไม่มี 18.0
+
+- name: Law Firm Management (Jeev Bits)
+  url: https://apps.odoo.com/apps/modules/17.0/law_firm_bits
+  version: "17.0"
+  license: Proprietary
+  relevance: medium
+  notes: billable hours, invoicing, case management
+
+# ============================================================
+# AGREEMENT / CONTRACT — จัดการสัญญา
+# ============================================================
+
+- name: Agreement (OCA)
+  url: https://apps.odoo.com/apps/modules/18.0/agreement
+  version: "18.0"
+  price: ฟรี
+  license: AGPL-3
+  developer: Akretion, OCA
+  github: https://github.com/OCA/agreement
+  relevance: high
+  notes: >
+    base module: agreement object, template flag, partner link
+    ใช้ร่วมกับ legal.document.template ของเราได้
+    OCA — ฟรี, open source, 18.0 ready
+
+- name: Agreements Legal (OCA)
+  url: https://apps.odoo.com/apps/modules/16.0/agreement_legal
+  version: "16.0"
+  price: ฟรี
+  license: AGPL-3
+  developer: Pavlov Media, Open Source Integrators, OCA
+  github: https://github.com/OCA/agreement
+  relevance: high
+  notes: >
+    sections + clauses + dynamic content + PDF gen
+    คล้าย legal.clause ของเรา — ต้อง port จาก 16.0 → 18.0 หรือใช้เป็น reference
+
+- name: Agreement Legal Sale (OCA)
+  url: https://apps.odoo.com/apps/modules/12.0/agreement_legal_sale
+  version: "12.0"
+  price: ฟรี
+  license: AGPL-3
+  relevance: low
+  notes: auto-create agreement เมื่อ confirm quotation — เก่ามาก (12.0)
+
+# ============================================================
+# APPOINTMENT — นัดหมาย
+# ============================================================
+
+- name: Odoo Appointments (built-in)
+  url: https://www.odoo.com/app/appointments
+  version: "18.0"
+  price: ฟรี
+  license: built-in
+  relevance: high
+  notes: >
+    มาในตัว Odoo 18 — availability, auto-booking, reminders, payment
+    ใช้เป็น backend สำหรับ LIFF /liff/appointment ได้เลย
+
+- name: Universal Appointments (faOtools)
+  url: https://apps.odoo.com/apps/modules/18.0/business_appointment
+  version: "18.0"
+  price: €390
+  license: Proprietary
+  relevance: low
+  notes: >
+    ครบมาก แต่แพง — multi-step, portal, sale order, pricing
+    ไม่จำเป็นถ้าใช้ built-in Appointments + LIFF custom
+
+# ============================================================
+# E-SIGNATURE — ลายเซ็นอิเล็กทรอนิกส์
+# ============================================================
+
+- name: Odoo Sign (built-in)
+  url: https://www.odoo.com/app/sign
+  version: "18.0"
+  price: ฟรี
+  license: built-in
+  relevance: high
+  notes: >
+    e-Signature — legal validity (eIDAS EU, ESIGN US)
+    ผูกกับ legal.document.draft → state=signed
+    ส่งเอกสารให้ลูกค้าเซ็นผ่าน LIFF/email
+
+# ============================================================
+# DOCUMENT OCR / AI — อ่านเอกสาร
+# ============================================================
+
+- name: AI Document Processing (OCR)
+  url: https://apps.odoo.com/apps/modules/18.0/ocr_ai_documents
+  version: "18.0"
+  license: Proprietary
+  relevance: low
+  notes: >
+    Gemini/GPT-4 Vision — เน้น invoice/PO ไม่ใช่เอกสารกฎหมาย
+    adkcode ocr_legal_doc agent ของเราเฉพาะทางกว่า
+
+- name: AI-Driven Document Digitization (Webkul)
+  url: https://apps.odoo.com/apps/modules/18.0/odoo_invoice_digitization
+  version: "18.0"
+  license: Proprietary
+  relevance: low
+  notes: Gemini AI + OpenAI Vision — invoice digitization
+
+- name: Account Document Digitization (r3x)
+  url: https://apps.odoo.com/apps/modules/18.0/r3x_account_document_digitization
+  version: "18.0"
+  license: Proprietary
+  relevance: low
+  notes: >
+    Multi-model: Odoo AI, Google, OpenAI, Anthropic, DeepSeek
+    concept น่าสนใจ (multi-provider) แต่เน้น accounting
+
+# ============================================================
+# LINE INTEGRATION
+# ============================================================
+# ไม่มี LINE module ใน apps.odoo.com เลย — มีแต่ WhatsApp
+# line_integration module ของเราเป็น unique value ของ project

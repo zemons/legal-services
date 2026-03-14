@@ -1,0 +1,19 @@
+# Government Services — บริการรัฐ
+
+- name: e-Filing ศาลยุติธรรม
+  url: https://efiling.coj.go.th/
+  court: ศาลยุติธรรม
+  status: bookmarked
+  notes: ยื่นฟ้องออนไลน์ — อาจ integrate กับระบบในอนาคต
+
+- name: CIOS ระบบบริการออนไลน์ศาลยุติธรรม
+  url: https://cios.coj.go.th/
+  court: ศาลยุติธรรม
+  status: bookmarked
+  notes: ตรวจสอบสถานะคดี, นัดพิจารณา
+
+- name: e-Court ศาลปกครอง
+  url: https://ecourt.admincourt.go.th/
+  court: ศาลปกครอง
+  status: bookmarked
+  notes: ระบบศาลปกครองออนไลน์

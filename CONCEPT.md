@@ -20,6 +20,7 @@
 ### AI + ทนาย
 - รับ intake จากลูกค้า → วิเคราะห์ → สรุป → สร้าง lead ใน Odoo
 - จัดการนัดหมาย / แจ้งเตือน deadline
+- กำหนดแนวคดี: AI วิเคราะห์มุมต่อสู้ + ค้นฎีกาสนับสนุน + ประเมินโอกาสชนะ → ทนายตรวจสอบและตัดสินใจ
 
 ### ทนายเท่านั้น
 - ว่าความในศาล
@@ -71,10 +72,39 @@
 | LINE Bot | Odoo controller + LINE Messaging API |
 | LIFF | Odoo website/portal pages (OWL + QWeb templates) |
 | CRM / Billing | Odoo 18 |
+| Document Sync | Resilio Sync (P2P, AES-128 encrypted) |
 | Deploy | Docker Compose (Odoo + adkcode) |
 
 > **Design Decision**: ไม่ใช้ Node.js backend หรือ React LIFF แยก
 > LIFF pages เป็น Odoo website pages — ลดจำนวน service, ใช้ ORM ตรง, auth ผ่าน Odoo session
+
+---
+
+## Document Sync (Resilio Sync)
+
+ใช้ Resilio Sync (P2P) sync เอกสารคดีระหว่างเครื่องทนาย ↔ Platform server
+ไม่เพิ่ม service — Resilio Client ติดตั้งบน server + เครื่องทนายแต่ละคน
+
+### หลักการ
+
+- ทนายลากไฟล์ใส่ folder คดีในเครื่อง → sync อัตโนมัติให้ทุกคนในทีม + server
+- ทนายแต่ละคน sync เฉพาะคดีที่รับผิดชอบ (Selective Sync)
+- access control จัดการผ่าน Odoo (collaborator_ids)
+
+### AI Watch (Event-driven)
+
+ไม่ให้ AI อ่านตลอดเวลา (เปลือง API) — ใช้ event-driven:
+
+```
+ไฟล์ใหม่เข้า folder → Resilio API (file event)
+  → Odoo controller → adkcode case_strategist
+    → OCR/อ่านเอกสาร → สรุป
+    → อัปเดต _ai/case_summary.md
+    → อัปเดต _ai/strategy.md (ถ้ามีข้อมูลที่เปลี่ยนแนวคดี)
+    → sync กลับเครื่องทนาย + LINE push แจ้ง
+```
+
+ทนายเปิดอ่าน `_ai/` folder ได้ทันทีเหมือนไฟล์ปกติ — ไม่ต้องเปิดเว็บ
 
 ---
 
@@ -93,10 +123,11 @@
 ```
 data/
 ├── knowledge/
-│   ├── dika/          ← ฎีกาศาลฎีกา
-│   ├── statute/       ← ประมวลกฎหมาย
-│   ├── regulation/    ← กฎกระทรวง, ระเบียบ
-│   └── article/       ← บทความกฎหมาย
+│   ├── dika/              ← ฎีกาศาลฎีกา
+│   ├── statute/           ← ประมวลกฎหมาย
+│   ├── regulation/        ← กฎกระทรวง, ระเบียบ
+│   ├── article/           ← บทความกฎหมาย
+│   └── strategy_patterns/ ← รูปแบบแนวคดีที่เคยใช้สำเร็จ (feedback loop)
 ├── templates/
 │   ├── contract/      ← สัญญาประเภทต่างๆ
 │   ├── petition/      ← คำร้อง, คำฟ้อง
@@ -104,8 +135,15 @@ data/
 │   └── will/          ← พินัยกรรม
 └── cases/
     └── {case_id}/
-        ├── intake.json
-        └── documents/
+        ├── _ai/                    ← AI เขียนอัตโนมัติ
+        │   ├── case_summary.md     ← สรุปคดี (อัปเดตเมื่อมีเอกสารใหม่)
+        │   ├── strategy.md         ← แนวคดี + มุมต่อสู้ + โอกาสชนะ
+        │   ├── document_index.json ← รายการเอกสาร + สรุปแต่ละชิ้น
+        │   └── related_dika.md     ← ฎีกาที่เกี่ยวข้อง
+        ├── intake/                 ← เอกสารจากลูกค้า
+        ├── evidence/               ← พยานหลักฐาน
+        ├── drafts/                 ← ร่างเอกสาร
+        └── correspondence/         ← หนังสือโต้ตอบ
 ```
 
 ### Metadata ของ Knowledge (ฎีกา/กฎหมาย)
@@ -119,6 +157,10 @@ year: 2566
 category: แพ่ง
 topic: [สัญญาเช่า, ผิดนัด, ค่าเสียหาย]
 summary: ผู้เช่าผิดนัดชำระค่าเช่า ผู้ให้เช่าบอกเลิกสัญญาได้
+result: โจทก์ชนะ
+legal_basis: [ป.พ.พ. ม.560, ป.พ.พ. ม.387]
+key_facts: [มีสัญญาเป็นลายลักษณ์อักษร, ผู้เช่าไม่ชำระค่าเช่า 3 เดือน]
+ruling_principle: ผู้ให้เช่ามีสิทธิบอกเลิกสัญญาเมื่อผู้เช่าผิดนัดชำระค่าเช่า
 ---
 ```
 
@@ -136,13 +178,70 @@ required_fields: [ชื่อผู้ให้เช่า, ชื่อผู
 ⚠️ ต้องให้ทนายตรวจสอบก่อนลงนาม
 ```
 
+### Strategy Pattern (รูปแบบแนวคดีที่เคยใช้สำเร็จ)
+
+```markdown
+---
+type: strategy_pattern
+case_type: แพ่ง-สัญญาเช่า
+facts_pattern: [ผู้เช่าผิดนัด, มีสัญญาเป็นลายลักษณ์อักษร]
+winning_angle: ผิดสัญญา (ป.พ.พ. ม.560)
+losing_angles: [ละเมิด (ยากพิสูจน์เจตนา)]
+result: ชนะ
+lawyer_notes: "สัญญามีข้อกำหนดชัดเจน ทำให้สู้ง่าย"
+---
+```
+
 ### Index Strategy
 
 | ประเภท | วิธี AI ใช้ | Index |
 |--------|-----------|-------|
 | ฎีกา / กฎหมาย | semantic search → อ้างอิง | ✓ |
 | Template | read_file ทั้งไฟล์ → เติมข้อมูล | ✓ ค้นหาชื่อ |
+| Strategy Pattern | semantic search → เทียบกับข้อเท็จจริง | ✓ |
 | เอกสารคดี | read_file ตาม case_id | ✗ แยกต่างหาก |
+
+---
+
+## AI Case Strategy — วิธีทำให้ AI เชี่ยวชาญแนวคดี
+
+### เสาที่ 1: Knowledge Base ที่แข็งแกร่ง
+
+AI วิเคราะห์คดีได้ดีเท่ากับข้อมูลที่มี — ฎีกาต้อง tag metadata ให้ครบ:
+- `result` — ผลคดี (โจทก์ชนะ/จำเลยชนะ/เจรจา)
+- `legal_basis` — มาตราที่ศาลใช้
+- `key_facts` — ข้อเท็จจริงสำคัญที่ศาลใช้ตัดสิน
+- `ruling_principle` — หลักกฎหมายที่ศาลวางไว้
+
+ยิ่ง metadata ละเอียด → AI ค้นฎีกาที่ตรงกับข้อเท็จจริงได้แม่นยำขึ้น
+
+### เสาที่ 2: IRAC Reasoning (กรอบการวิเคราะห์)
+
+case_strategist ใช้ IRAC Framework วิเคราะห์ทีละมุม:
+
+```
+สำหรับแต่ละมุมต่อสู้ที่เป็นไปได้:
+
+  ISSUE    — ระบุประเด็นข้อพิพาท
+  RULE     — ค้น RAG หามาตรากฎหมาย + องค์ประกอบที่ต้องพิสูจน์
+  APPLICATION — เทียบข้อเท็จจริงกับกฎหมาย + ค้นฎีกาที่คล้ายกัน
+  CONCLUSION  — สรุปโอกาสชนะ (สูง/กลาง/ต่ำ) + เหตุผล
+
+→ ทำซ้ำทุกมุม → เปรียบเทียบ → แนะนำมุมที่ดีที่สุด
+```
+
+### เสาที่ 3: Feedback Loop (เรียนรู้จากคดีจริง)
+
+AI ฉลาดขึ้นเรื่อยๆ จากประสบการณ์จริงของสำนักงาน:
+
+```
+AI วิเคราะห์แนวคดี
+  → ทนายตรวจสอบ + แก้ไข + เลือกแนวคดี
+    → คดีจบ → บันทึกผล (ชนะ/แพ้/เจรจา)
+      → ทนายให้ feedback (AI วิเคราะห์ถูก/ผิด)
+        → สร้าง strategy_pattern → เก็บเข้า RAG
+          → คดีต่อไป AI ใช้ pattern นี้อ้างอิง
+```
 
 ---
 
@@ -180,6 +279,13 @@ required_fields: [ชื่อผู้ให้เช่า, ชื่อผู
 → ส่งรูปใน LINE chat → bot ถาม [เก็บเข้าคลัง] [ไม่ใช่]
 → หรือกด [ถ่ายรูปฎีกา] → LIFF → Odoo /liff/capture
 → OCR + AI ดึง metadata → ทนายตรวจ → เข้า RAG
+
+เอกสารคดี (Resilio Sync)
+→ ลากไฟล์ใส่ ~/cases/{case_id}/ ในเครื่อง
+→ Resilio sync อัตโนมัติ → ทีมเห็นเอกสารเดียวกัน
+→ AI อ่าน + วิเคราะห์ → เขียน _ai/strategy.md
+→ ทนายเปิดอ่าน _ai/ ได้ทันทีใน folder เดียวกัน
+→ LINE push แจ้ง "AI อัปเดตแนวคดีแล้ว"
 ```
 
 ### Admin / Staff

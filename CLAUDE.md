@@ -14,8 +14,8 @@ No separate Node.js backend or React LIFF app. LIFF pages are Odoo website/porta
 - `CONCEPT.md` — master design doc (UX per role, LIFF pages, Odoo modules, document strategy)
 - `ARCHITECTURE.md` — system diagram and data flows
 - `AGENTS.md` — legal AI agent instructions loaded by adkcode
-- `RAG_QUESTIONS.md` — pending decisions before RAG development starts
-- `adkcode/adkcode/rag.py` — RAG engine (needs modification for PDF legal docs)
+- `RAG_QUESTIONS.md` — RAG design decisions (answered)
+- `adkcode/adkcode/rag.py` — RAG engine (CodebaseIndex for code, LegalIndex for legal docs)
 - `adkcode/adkcode/agent.py` — multi-agent orchestrator
 
 ## adkcode Architecture
@@ -23,35 +23,66 @@ No separate Node.js backend or React LIFF app. LIFF pages are Odoo website/porta
 adkcode is a multi-agent system built on Google ADK:
 - `agent.py` — builds agents from AGENTS.md + plugins, runs ADK session loop
 - `rag.py` — embedding (gemini-embedding-001, 768-dim), cosine similarity, JSON index storage
-- `tools.py` — 11 tools: read_file, write_file, edit_file, list_files, grep, shell, web_fetch, web_search, read_image, index_codebase, semantic_search
+- `tools.py` — 14 tools: read_file, write_file, edit_file, list_files, grep, shell, web_fetch, web_search, read_image, index_codebase, semantic_search, index_legal_docs, legal_search, legal_search_by_facts
 - `guardrails.py` — ALLOWED_DIRS whitelist, BLOCKED_COMMANDS, audit_log
 - `plugin_loader.py` — loads plugins from `plugins/` (plugin.json + SKILL.md + commands/*.md)
 
-## Legal Agents (to be built)
+## Legal Agents (implemented)
 
-Replace coder/reviewer/tester with:
-- `orchestrator` — route to sub-agents
-- `legal_advisor` — answer questions using RAG, cite ฎีกา/กฎหมาย
-- `doc_drafter` — draft contracts/documents from templates
-- `intake_analyst` — analyze case intake → create Odoo lead
-- `ocr_legal_doc` — OCR รูปถ่ายเอกสารกฎหมาย → ดึง metadata → จัด format Markdown + YAML frontmatter
+agent.py มี 5 legal sub-agents แทน coder/reviewer/tester:
+- `orchestrator` — route ไป sub-agent ที่เหมาะสม + tools: web_search, legal_search
+- `legal_advisor` — ตอบคำถามกฎหมาย อ้างอิง RAG + tools: legal_search, legal_search_by_facts
+- `doc_drafter` — draft สัญญา/คำร้อง จาก template + tools: read_file, write_file, legal_search
+- `intake_analyst` — วิเคราะห์ intake คัดกรองคดี + tools: legal_search
+- `ocr_legal_doc` — OCR รูปถ่ายเอกสาร → metadata → RAG + tools: read_image, write_file
+- `case_strategist` — IRAC Framework วิเคราะห์มุมต่อสู้ + tools: legal_search, legal_search_by_facts
 
-## RAG Modification Plan
+### Legal Plugin (`plugins/legal/`)
+5 skills: legal-advisor, case-strategy, document-drafting, intake-analysis, ocr-legal-doc
+5 commands: /analyze-case, /find-dika, /draft, /intake, /ocr
 
-Current `rag.py` only handles code files. Needs:
-1. PDF extraction via pdfplumber
-2. Legal document chunking (by section/มาตรา)
-3. YAML frontmatter metadata support (type, case_no, court, year, category, topic)
-4. Separate collections: dika, statute, regulation, contract, firm
+## RAG Architecture (implemented)
 
-## Document Storage
+`rag.py` มี 2 classes:
+- **CodebaseIndex** — index code files (เดิม)
+- **LegalIndex** — index legal documents with metadata + collections
+
+### LegalIndex features
+- YAML frontmatter parser (built-in, ไม่ต้องพึ่ง lib)
+- PDF text extraction via pdfplumber
+- แยก collections: dika, statute, regulation, article, strategy_patterns
+- แยก index file ต่อ collection (`.index_dika.json`, `.index_statute.json`, etc.)
+- `search()` — semantic search across collections + metadata_filter
+- `search_by_key_facts()` — ค้นฎีกาจากข้อเท็จจริงที่คล้ายกัน (boost score ตาม overlap)
+
+### Legal tools ใน tools.py
+- `index_legal_docs(collection)` — build index
+- `legal_search(query, collections)` — semantic search
+- `legal_search_by_facts(facts)` — search by key_facts similarity
+
+### RAG design decisions (ดู RAG_QUESTIONS.md)
+- Embedding: Gemini (gemini-embedding-001, 768-dim)
+- Storage: JSON file per collection (อัปเกรด Qdrant เมื่อเกิน 10k chunks)
+- Chunking: ตามโครงสร้างเอกสาร (1 ฎีกา = 1 chunk, กฎหมายแบ่งตามมาตรา)
+- IRAC reasoning chain for case_strategist (Phase 2)
+- Feedback loop: คดีจบ → บันทึก strategy_pattern → AI เรียนรู้จากคดีจริง (Phase 2)
+
+## Document Storage & Sync
 
 ```
 data/
-├── knowledge/  ← semantic search (ฎีกา, กฎหมาย) — Markdown + YAML frontmatter
+├── knowledge/  ← semantic search (ฎีกา, กฎหมาย, strategy_patterns) — Markdown + YAML frontmatter
 ├── templates/  ← read_file + fill {{field}} placeholders (สัญญา, คำร้อง)
-└── cases/      ← per case_id, not indexed in RAG
+└── cases/      ← per case_id, synced via Resilio Sync (P2P)
+    └── {case_id}/
+        ├── _ai/          ← AI auto-generated (case_summary.md, strategy.md, related_dika.md)
+        ├── intake/       ← client documents
+        ├── evidence/     ← evidence files
+        ├── drafts/       ← draft documents
+        └── correspondence/
 ```
+
+**Resilio Sync**: P2P file sync ระหว่างเครื่องทนาย ↔ server — event-driven AI watch (Resilio API → Odoo → adkcode)
 
 ## Odoo Modules (3 custom modules)
 

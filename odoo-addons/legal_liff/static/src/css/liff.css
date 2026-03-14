@@ -92,6 +92,8 @@
     cursor: pointer;
     margin-top: 8px;
     transition: background 0.2s;
+    text-align: center;
+    text-decoration: none;
 }
 
 .liff-btn:hover,
@@ -107,6 +109,16 @@
 .liff-btn-close:hover,
 .liff-btn-close:active {
     background: #7f8c8d;
+}
+
+.liff-btn-outline {
+    background: transparent;
+    color: #2ECC71;
+    border: 2px solid #2ECC71;
+}
+
+.liff-btn-outline:active {
+    background: #f0faf4;
 }
 
 /* Success page */
@@ -139,8 +151,319 @@
 }
 
 /* Alert */
-.alert-danger {
+.liff-error {
+    background: #fdecea;
+    color: #c0392b;
+    padding: 12px;
     border-radius: 10px;
     font-size: 14px;
     margin-bottom: 16px;
+}
+
+.text-danger {
+    color: #e74c3c;
+}
+
+/* Badge */
+.liff-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.liff-badge-lg {
+    font-size: 14px;
+    padding: 6px 16px;
+}
+
+/* Card */
+.liff-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.liff-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #2C3E50;
+}
+
+.liff-card-meta {
+    font-size: 13px;
+    color: #7f8c8d;
+    margin-bottom: 4px;
+}
+
+/* Section */
+.liff-section {
+    margin: 20px 0 12px;
+}
+
+.liff-section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2C3E50;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #f0f0f0;
+    margin-bottom: 12px;
+}
+
+/* Info row */
+.liff-info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f5f5f5;
+    font-size: 14px;
+}
+
+.liff-info-label {
+    color: #7f8c8d;
+}
+
+.liff-info-value {
+    font-weight: 600;
+    text-align: right;
+    max-width: 60%;
+}
+
+/* Timeline */
+.liff-timeline {
+    position: relative;
+    padding-left: 28px;
+    margin: 16px 0;
+}
+
+.liff-timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 4px;
+    bottom: 4px;
+    width: 2px;
+    background: #dfe6e9;
+}
+
+.liff-timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.liff-timeline-dot {
+    position: absolute;
+    left: -24px;
+    top: 4px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #3498db;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px #3498db;
+}
+
+.liff-timeline-dot.status { background: #2ecc71; box-shadow: 0 0 0 2px #2ecc71; }
+.liff-timeline-dot.court { background: #e67e22; box-shadow: 0 0 0 2px #e67e22; }
+.liff-timeline-dot.document { background: #9b59b6; box-shadow: 0 0 0 2px #9b59b6; }
+.liff-timeline-dot.note { background: #95a5a6; box-shadow: 0 0 0 2px #95a5a6; }
+
+.liff-timeline-date {
+    font-size: 11px;
+    color: #95a5a6;
+    margin-bottom: 2px;
+}
+
+.liff-timeline-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2C3E50;
+}
+
+.liff-timeline-desc {
+    font-size: 13px;
+    color: #7f8c8d;
+    margin-top: 2px;
+}
+
+/* Court card */
+.liff-court-card {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px;
+    background: #fef9f0;
+    border: 1px solid #f5e6cc;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.liff-court-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background: #e67e22;
+    color: #fff;
+    border-radius: 10px;
+}
+
+.liff-court-info {
+    flex: 1;
+}
+
+.liff-court-date {
+    font-size: 14px;
+    font-weight: 700;
+    color: #e67e22;
+}
+
+.liff-court-detail {
+    font-size: 13px;
+    color: #7f8c8d;
+    margin-top: 2px;
+}
+
+/* Filter tabs */
+.liff-tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 8px 0 12px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.liff-tab {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    background: #f0f0f0;
+    color: #7f8c8d;
+    border: none;
+    cursor: pointer;
+    font-family: 'Noto Sans Thai', sans-serif;
+}
+
+.liff-tab.active {
+    background: #2ECC71;
+    color: #fff;
+}
+
+/* Spinner */
+.liff-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #f0f0f0;
+    border-top-color: #2ECC71;
+    border-radius: 50%;
+    animation: liff-spin 0.7s linear infinite;
+    margin: 40px auto;
+}
+
+@keyframes liff-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Empty state */
+.liff-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #95a5a6;
+}
+
+.liff-empty-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+/* Case card (lawyer dashboard) */
+.liff-case-card {
+    padding: 14px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    color: inherit;
+    transition: box-shadow 0.15s;
+}
+
+.liff-case-card:active {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.liff-case-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.liff-case-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #2C3E50;
+    flex: 1;
+    margin-right: 8px;
+}
+
+.liff-case-client {
+    font-size: 13px;
+    color: #7f8c8d;
+}
+
+.liff-case-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.liff-case-court {
+    font-size: 12px;
+    color: #e67e22;
+    font-weight: 600;
+}
+
+/* Lawyer header */
+.liff-lawyer-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 0;
+}
+
+.liff-lawyer-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #2ECC71;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 48px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.liff-lawyer-info h2 {
+    font-size: 18px;
+    text-align: left;
+}
+
+.liff-lawyer-info .liff-subtitle {
+    text-align: left;
 }

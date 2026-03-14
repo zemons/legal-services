@@ -1,0 +1,23 @@
+# Legal Databases — ฐานข้อมูลกฎหมาย
+
+- name: ราชกิจจานุเบกษา
+  url: https://ratchakitcha.soc.go.th/
+  status: bookmarked
+  notes: กฎหมาย พ.ร.บ. พ.ร.ก. ประกาศ ระเบียบ ฉบับทางการ
+
+- name: สำนักงานคณะกรรมการกฤษฎีกา — ฐานข้อมูลกฎหมาย
+  url: https://www.krisdika.go.th/
+  status: bookmarked
+  notes: ค้นหากฎหมายทุกฉบับ (พ.ร.บ., ป.พ.พ., ป.อ., ป.วิแพ่ง, ป.วิอาญา)
+
+- name: ศาลฎีกา — ค้นหาคำพิพากษา
+  url: http://deka.supremecourt.or.th/
+  status: bookmarked
+  notes: >
+    ฐานข้อมูลคำพิพากษาศาลฎีกา — สำคัญมากสำหรับ RAG (ฎีกา)
+    ใช้ค้นหาฎีกาเพื่อสร้าง knowledge/dika/
+
+- name: Thai Law — กฎหมายไทย (English)
+  url: https://www.thailandlawonline.com/
+  status: bookmarked
+  notes: กฎหมายไทยฉบับภาษาอังกฤษ — ใช้อ้างอิงกรณีลูกค้าต่างชาติ

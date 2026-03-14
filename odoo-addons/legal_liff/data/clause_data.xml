@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ═══ CLAUSE CATEGORIES ═════════════════════════════ -->
+
+        <record id="clause_cat_guarantee" model="legal.clause.category">
+            <field name="name">หลักประกัน / ค้ำประกัน</field>
+            <field name="code">guarantee</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="clause_cat_penalty" model="legal.clause.category">
+            <field name="name">เบี้ยปรับ / ค่าเสียหาย</field>
+            <field name="code">penalty</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="clause_cat_termination" model="legal.clause.category">
+            <field name="name">การเลิกสัญญา / บอกเลิก</field>
+            <field name="code">termination</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <record id="clause_cat_payment" model="legal.clause.category">
+            <field name="name">การชำระเงิน / งวดชำระ</field>
+            <field name="code">payment</field>
+            <field name="sequence">40</field>
+        </record>
+
+        <record id="clause_cat_delivery" model="legal.clause.category">
+            <field name="name">การส่งมอบ / โอนกรรมสิทธิ์</field>
+            <field name="code">delivery</field>
+            <field name="sequence">50</field>
+        </record>
+
+        <record id="clause_cat_dispute" model="legal.clause.category">
+            <field name="name">ข้อพิพาท / อนุญาโตตุลาการ</field>
+            <field name="code">dispute</field>
+            <field name="sequence">60</field>
+        </record>
+
+        <record id="clause_cat_confidentiality" model="legal.clause.category">
+            <field name="name">ความลับ / ข้อมูลส่วนบุคคล</field>
+            <field name="code">confidentiality</field>
+            <field name="sequence">70</field>
+        </record>
+
+        <record id="clause_cat_force_majeure" model="legal.clause.category">
+            <field name="name">เหตุสุดวิสัย</field>
+            <field name="code">force-majeure</field>
+            <field name="sequence">80</field>
+        </record>
+
+        <record id="clause_cat_non_compete" model="legal.clause.category">
+            <field name="name">ข้อห้ามแข่งขัน</field>
+            <field name="code">non-compete</field>
+            <field name="sequence">90</field>
+        </record>
+
+        <record id="clause_cat_governing_law" model="legal.clause.category">
+            <field name="name">กฎหมายที่ใช้บังคับ</field>
+            <field name="code">governing-law</field>
+            <field name="sequence">100</field>
+        </record>
+
+        <!-- ═══ SAMPLE CLAUSES ════════════════════════════════ -->
+
+        <!-- Guarantee -->
+        <record id="clause_guarantee_standard" model="legal.clause">
+            <field name="name">ข้อหลักประกัน (มาตรฐาน)</field>
+            <field name="code">guarantee-standard</field>
+            <field name="category_id" ref="clause_cat_guarantee"/>
+            <field name="risk_level">standard</field>
+            <field name="document_types">contract</field>
+            <field name="legal_reference">ป.พ.พ. มาตรา 680-701</field>
+            <field name="state">approved</field>
+            <field name="content">เพื่อเป็นหลักประกันการปฏิบัติตามสัญญา {{ผู้วางหลักประกัน}} ตกลงวางหลักประกันเป็น {{ประเภทหลักประกัน}} มูลค่า {{มูลค่าหลักประกัน}} บาท ({{มูลค่าหลักประกัน_text}}) ผู้รับหลักประกันจะคืนหลักประกันเมื่อคู่สัญญาปฏิบัติตามสัญญาครบถ้วน</field>
+            <field name="tags">ค้ำประกัน,หลักทรัพย์</field>
+        </record>
+
+        <record id="clause_guarantee_enhanced" model="legal.clause">
+            <field name="name">ข้อหลักประกัน (เข้มงวด)</field>
+            <field name="code">guarantee-enhanced</field>
+            <field name="category_id" ref="clause_cat_guarantee"/>
+            <field name="risk_level">aggressive</field>
+            <field name="document_types">contract</field>
+            <field name="legal_reference">ป.พ.พ. มาตรา 680-701</field>
+            <field name="state">approved</field>
+            <field name="content">เพื่อเป็นหลักประกันการปฏิบัติตามสัญญา {{ผู้วางหลักประกัน}} ตกลงวางหลักประกันเป็น {{ประเภทหลักประกัน}} มูลค่าไม่น้อยกว่าร้อยละ {{อัตราหลักประกัน}} ของมูลค่าสัญญา คิดเป็นเงิน {{มูลค่าหลักประกัน}} บาท
+
+หากมูลค่าหลักประกันลดลงต่ำกว่าร้อยละ {{อัตราขั้นต่ำ}} ของมูลค่าสัญญา ผู้วางหลักประกันต้องเพิ่มหลักประกันให้ครบภายใน 15 วัน มิฉะนั้นถือว่าผิดสัญญา</field>
+            <field name="tags">ค้ำประกัน,หลักทรัพย์,เข้มงวด</field>
+        </record>
+
+        <!-- Penalty -->
+        <record id="clause_penalty_standard" model="legal.clause">
+            <field name="name">ข้อเบี้ยปรับ (มาตรฐาน)</field>
+            <field name="code">penalty-standard</field>
+            <field name="category_id" ref="clause_cat_penalty"/>
+            <field name="risk_level">standard</field>
+            <field name="document_types">contract</field>
+            <field name="legal_reference">ป.พ.พ. มาตรา 379-385</field>
+            <field name="state">approved</field>
+            <field name="content">หากฝ่ายใดผิดสัญญา ต้องชำระเบี้ยปรับให้แก่อีกฝ่ายเป็นจำนวนร้อยละ {{อัตราเบี้ยปรับ}} ของมูลค่าสัญญา ทั้งนี้ เบี้ยปรับดังกล่าวไม่ตัดสิทธิในการเรียกค่าเสียหายที่แท้จริงที่เกินกว่าเบี้ยปรับ</field>
+            <field name="tags">เบี้ยปรับ,ค่าเสียหาย</field>
+        </record>
+
+        <!-- Termination -->
+        <record id="clause_termination_standard" model="legal.clause">
+            <field name="name">ข้อเลิกสัญญา (มาตรฐาน)</field>
+            <field name="code">termination-standard</field>
+            <field name="category_id" ref="clause_cat_termination"/>
+            <field name="risk_level">standard</field>
+            <field name="document_types">contract</field>
+            <field name="legal_reference">ป.พ.พ. มาตรา 386-394</field>
+            <field name="state">approved</field>
+            <field name="content">หากฝ่ายใดผิดสัญญาข้อหนึ่งข้อใด อีกฝ่ายมีสิทธิบอกเลิกสัญญาได้ โดยต้องมีหนังสือบอกกล่าวให้อีกฝ่ายแก้ไขภายใน {{ระยะเวลาแก้ไข}} วัน หากไม่แก้ไขภายในกำหนด สัญญาเป็นอันเลิกกัน โดยฝ่ายผิดสัญญาต้องรับผิดชอบค่าเสียหายทั้งหมด</field>
+            <field name="tags">เลิกสัญญา,บอกเลิก</field>
+        </record>
+
+        <!-- Force Majeure -->
+        <record id="clause_force_majeure_standard" model="legal.clause">
+            <field name="name">ข้อเหตุสุดวิสัย (มาตรฐาน)</field>
+            <field name="code">force-majeure-standard</field>
+            <field name="category_id" ref="clause_cat_force_majeure"/>
+            <field name="risk_level">standard</field>
+            <field name="document_types">all</field>
+            <field name="state">approved</field>
+            <field name="content">คู่สัญญาฝ่ายใดไม่ต้องรับผิดชอบต่อการไม่ปฏิบัติตามสัญญา หากเกิดจากเหตุสุดวิสัย อันได้แก่ ภัยธรรมชาติ สงคราม การจลาจล โรคระบาด คำสั่งของรัฐ หรือเหตุการณ์อื่นใดที่อยู่นอกเหนือการควบคุมของคู่สัญญา
+
+ฝ่ายที่ได้รับผลกระทบต้องแจ้งให้อีกฝ่ายทราบภายใน {{ระยะเวลาแจ้ง}} วัน พร้อมหลักฐาน หากเหตุสุดวิสัยดำเนินต่อเนื่องเกิน {{ระยะเวลาสูงสุด}} วัน ทั้งสองฝ่ายมีสิทธิบอกเลิกสัญญาได้โดยไม่ถือว่าผิดสัญญา</field>
+            <field name="tags">เหตุสุดวิสัย,force majeure</field>
+        </record>
+
+        <!-- Dispute Resolution -->
+        <record id="clause_dispute_court" model="legal.clause">
+            <field name="name">ข้อพิพาท - ศาลไทย</field>
+            <field name="code">dispute-thai-court</field>
+            <field name="category_id" ref="clause_cat_dispute"/>
+            <field name="risk_level">standard</field>
+            <field name="document_types">all</field>
+            <field name="jurisdiction">thailand</field>
+            <field name="state">approved</field>
+            <field name="content">สัญญานี้อยู่ภายใต้บังคับและตีความตามกฎหมายแห่งราชอาณาจักรไทย หากมีข้อพิพาทเกิดขึ้นจากสัญญานี้ ให้ศาลที่มีเขตอำนาจในราชอาณาจักรไทยเป็นผู้พิจารณาชี้ขาด</field>
+            <field name="tags">ข้อพิพาท,ศาล,กฎหมายไทย</field>
+        </record>
+
+        <record id="clause_dispute_arbitration" model="legal.clause">
+            <field name="name">ข้อพิพาท - อนุญาโตตุลาการ</field>
+            <field name="code">dispute-arbitration</field>
+            <field name="category_id" ref="clause_cat_dispute"/>
+            <field name="risk_level">standard</field>
+            <field name="document_types">contract</field>
+            <field name="jurisdiction">thailand</field>
+            <field name="state">approved</field>
+            <field name="content">ข้อพิพาทใดๆ อันเกิดจากหรือเกี่ยวเนื่องกับสัญญานี้ ให้ระงับโดยการอนุญาโตตุลาการตามข้อบังคับของสถาบันอนุญาโตตุลาการ กระทรวงยุติธรรม โดยใช้อนุญาโตตุลาการ {{จำนวนอนุญาโตตุลาการ}} คน สถานที่อนุญาโตตุลาการ ณ กรุงเทพมหานคร ใช้ภาษาไทย คำชี้ขาดของอนุญาโตตุลาการถือเป็นที่สุด</field>
+            <field name="tags">อนุญาโตตุลาการ,ข้อพิพาท</field>
+        </record>
+
+        <!-- Confidentiality -->
+        <record id="clause_confidentiality_standard" model="legal.clause">
+            <field name="name">ข้อรักษาความลับ (มาตรฐาน)</field>
+            <field name="code">confidentiality-standard</field>
+            <field name="category_id" ref="clause_cat_confidentiality"/>
+            <field name="risk_level">standard</field>
+            <field name="document_types">contract</field>
+            <field name="state">approved</field>
+            <field name="content">คู่สัญญาทั้งสองฝ่ายตกลงรักษาความลับของข้อมูลที่ได้รับจากอีกฝ่าย อันเนื่องมาจากสัญญานี้ โดยจะไม่เปิดเผยต่อบุคคลภายนอก เว้นแต่ได้รับความยินยอมเป็นลายลักษณ์อักษร หรือเป็นการเปิดเผยตามคำสั่งศาลหรือหน่วยงานรัฐที่มีอำนาจ
+
+ข้อกำหนดนี้มีผลบังคับต่อไปอีก {{ระยะเวลารักษาความลับ}} ปี หลังจากสัญญาสิ้นสุด</field>
+            <field name="tags">ความลับ,NDA,ข้อมูล</field>
+        </record>
+
+        <!-- Governing Law -->
+        <record id="clause_governing_law_thai" model="legal.clause">
+            <field name="name">กฎหมายที่ใช้บังคับ - ไทย</field>
+            <field name="code">governing-law-thai</field>
+            <field name="category_id" ref="clause_cat_governing_law"/>
+            <field name="risk_level">standard</field>
+            <field name="document_types">all</field>
+            <field name="jurisdiction">thailand</field>
+            <field name="state">approved</field>
+            <field name="content">สัญญานี้จัดทำขึ้นเป็นภาษาไทย และอยู่ภายใต้บังคับกฎหมายแห่งราชอาณาจักรไทย</field>
+            <field name="tags">กฎหมายไทย,governing law</field>
+        </record>
+
+    </data>
+</odoo>

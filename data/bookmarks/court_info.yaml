@@ -1,0 +1,71 @@
+# Court Info — ข้อมูลความรู้จากศาล
+# คำพิพากษา, บทความ, ห้องสมุด, หลักสูตร
+
+# === ศาลปกครอง ===
+
+- name: ศาลปกครอง — สืบค้นคำพิพากษา/คำสั่ง/คำแถลงการณ์
+  url: https://www.admincourt.go.th/admincourt/site/05SearchSuit.html
+  court: ศาลปกครอง
+  status: blocked  # Incapsula — ต้องเข้าผ่าน browser
+  notes: >
+    ค้นหาคำพิพากษา/คำสั่ง/คำแถลงการณ์ศาลปกครองสูงสุด
+    สำคัญมากสำหรับ RAG — คดีปกครองไม่มีใน deka.supremecourt.or.th
+
+- name: ศาลปกครอง — สืบค้นจำแนกตามประเภทคดี
+  url: https://www.admincourt.go.th/admincourt/site/05searchcategorylist.html
+  court: ศาลปกครอง
+  status: blocked  # Incapsula
+  notes: >
+    คำพิพากษาศาลปกครองสูงสุด จำแนกตามประเภทคดี
+    หมวดหมู่: การบริหารราชการ, สัญญาทางปกครอง, ละเมิดทางปกครอง, สิ่งแวดล้อม ฯลฯ
+    ใช้สำหรับสร้าง knowledge/admin_court_cases/
+
+- name: ศาลปกครอง — คดีที่น่าสนใจ (mobile)
+  url: https://www.admincourt.go.th/adminCourt/m/suit.php
+  court: ศาลปกครอง
+  status: blocked  # Incapsula
+
+- name: ศูนย์การเรียนรู้ศาลปกครอง — ห้องสมุด
+  url: https://aclib.admincourt.go.th/
+  court: ศาลปกครอง
+  status: bookmarked
+  notes: >
+    ห้องสมุดออนไลน์ — บทความ วารสาร เอกสารวิชาการ
+    มีเนื้อหาเชิงวิชาการที่ใช้ประกอบ RAG ได้
+
+- name: ศูนย์การเรียนรู้ศาลปกครอง — หลักสูตร
+  url: https://accos.admincourt.go.th/course/course-1
+  court: ศาลปกครอง
+  status: bookmarked
+  notes: หลักสูตรเรียนรู้กฎหมายปกครองออนไลน์
+
+- name: ศาลปกครอง — Open Data Catalog
+  url: https://admincourt.gdcatalog.go.th/
+  court: ศาลปกครอง
+  status: pending  # timeout
+  notes: ชุดข้อมูลเปิด — อาจมี dataset คำพิพากษาที่ดาวน์โหลด bulk ได้
+
+# === ศาลทรัพย์สินทางปัญญาฯ ===
+
+- name: ศาลทรัพย์สินทางปัญญาฯ — ความรู้/บทความ
+  url: https://ipitc.coj.go.th/th/content/category/index/id/10211
+  court: ศาลทรัพย์สินทางปัญญาฯ
+  status: pending  # timeout
+  notes: >
+    บทความ/ข้อมูลความรู้เกี่ยวกับทรัพย์สินทางปัญญาและการค้าระหว่างประเทศ
+    มีประโยชน์สำหรับ RAG knowledge base
+
+# === อื่นๆ ===
+
+- name: สภาทนายความ — แบบพิมพ์ศาล (mirror)
+  url: https://lawyerscouncil.or.th/form-coj/
+  court: ทั่วไป
+  status: pending
+  notes: mirror/links ไปยัง COJ court forms
+
+- name: สำนักงานอัยการสูงสุด — ดาวน์โหลด
+  url: https://www3.ago.go.th/tax/download/
+  court: อัยการ
+  format: .doc
+  status: pending
+  notes: แบบฟอร์มคำร้อง (มุมอัยการ)

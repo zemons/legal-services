@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ═══ สัญญา (Contract) ═══ -->
+
+        <record id="tmpl_rental_agreement" model="legal.document.template">
+            <field name="name">สัญญาเช่าทรัพย์สิน</field>
+            <field name="code">contract/rental-agreement</field>
+            <field name="category">contract</field>
+            <field name="description">สัญญาเช่าบ้าน คอนโด ที่ดิน อาคาร</field>
+            <field name="sequence">1</field>
+            <field name="template_file_path">contract/rental-agreement.md</field>
+            <field name="required_fields">[
+    {"name": "landlord_name", "label": "ชื่อผู้ให้เช่า", "type": "text", "required": true},
+    {"name": "landlord_age", "label": "อายุผู้ให้เช่า", "type": "number", "required": false},
+    {"name": "landlord_address", "label": "ที่อยู่ผู้ให้เช่า", "type": "address", "required": true},
+    {"name": "tenant_name", "label": "ชื่อผู้เช่า", "type": "text", "required": true},
+    {"name": "tenant_age", "label": "อายุผู้เช่า", "type": "number", "required": false},
+    {"name": "tenant_address", "label": "ที่อยู่ผู้เช่า", "type": "address", "required": true},
+    {"name": "property_address", "label": "ที่อยู่ทรัพย์สิน", "type": "address", "required": true},
+    {"name": "purpose", "label": "วัตถุประสงค์การเช่า", "type": "text", "required": false},
+    {"name": "rent_amount", "label": "ค่าเช่า/เดือน (บาท)", "type": "number", "required": true},
+    {"name": "deposit_amount", "label": "เงินประกัน (บาท)", "type": "number", "required": false},
+    {"name": "start_date", "label": "วันเริ่มสัญญา", "type": "date", "required": true},
+    {"name": "end_date", "label": "วันสิ้นสุดสัญญา", "type": "date", "required": true}
+]</field>
+        </record>
+
+        <record id="tmpl_sale_agreement" model="legal.document.template">
+            <field name="name">สัญญาซื้อขาย</field>
+            <field name="code">contract/sale-agreement</field>
+            <field name="category">contract</field>
+            <field name="description">สัญญาซื้อขายสินค้า ทรัพย์สิน</field>
+            <field name="sequence">2</field>
+            <field name="required_fields">[
+    {"name": "seller_name", "label": "ชื่อผู้ขาย", "type": "text", "required": true},
+    {"name": "seller_address", "label": "ที่อยู่ผู้ขาย", "type": "address", "required": true},
+    {"name": "buyer_name", "label": "ชื่อผู้ซื้อ", "type": "text", "required": true},
+    {"name": "buyer_address", "label": "ที่อยู่ผู้ซื้อ", "type": "address", "required": true},
+    {"name": "item_description", "label": "รายละเอียดสิ่งที่ซื้อขาย", "type": "textarea", "required": true},
+    {"name": "price", "label": "ราคา (บาท)", "type": "number", "required": true},
+    {"name": "payment_terms", "label": "เงื่อนไขการชำระเงิน", "type": "textarea", "required": false},
+    {"name": "delivery_date", "label": "วันส่งมอบ", "type": "date", "required": false}
+]</field>
+        </record>
+
+        <record id="tmpl_loan_agreement" model="legal.document.template">
+            <field name="name">สัญญากู้ยืมเงิน</field>
+            <field name="code">contract/loan-agreement</field>
+            <field name="category">contract</field>
+            <field name="description">สัญญากู้ยืมเงินระหว่างบุคคล</field>
+            <field name="sequence">3</field>
+            <field name="required_fields">[
+    {"name": "lender_name", "label": "ชื่อผู้ให้กู้", "type": "text", "required": true},
+    {"name": "lender_address", "label": "ที่อยู่ผู้ให้กู้", "type": "address", "required": true},
+    {"name": "borrower_name", "label": "ชื่อผู้กู้", "type": "text", "required": true},
+    {"name": "borrower_address", "label": "ที่อยู่ผู้กู้", "type": "address", "required": true},
+    {"name": "loan_amount", "label": "จำนวนเงินกู้ (บาท)", "type": "number", "required": true},
+    {"name": "interest_rate", "label": "ดอกเบี้ย (%/ปี)", "type": "number", "required": true},
+    {"name": "installment_amount", "label": "ค่างวด/เดือน (บาท)", "type": "number", "required": false},
+    {"name": "loan_date", "label": "วันที่กู้", "type": "date", "required": true},
+    {"name": "due_date", "label": "วันครบกำหนดชำระ", "type": "date", "required": true}
+]</field>
+        </record>
+
+        <record id="tmpl_employment_contract" model="legal.document.template">
+            <field name="name">สัญญาจ้างงาน</field>
+            <field name="code">contract/employment-contract</field>
+            <field name="category">contract</field>
+            <field name="description">สัญญาจ้างแรงงาน จ้างพนักงาน</field>
+            <field name="sequence">4</field>
+            <field name="required_fields">[
+    {"name": "employer_name", "label": "ชื่อนายจ้าง/บริษัท", "type": "text", "required": true},
+    {"name": "employer_address", "label": "ที่อยู่นายจ้าง", "type": "address", "required": true},
+    {"name": "employee_name", "label": "ชื่อลูกจ้าง", "type": "text", "required": true},
+    {"name": "employee_address", "label": "ที่อยู่ลูกจ้าง", "type": "address", "required": true},
+    {"name": "position", "label": "ตำแหน่ง", "type": "text", "required": true},
+    {"name": "salary", "label": "เงินเดือน (บาท)", "type": "number", "required": true},
+    {"name": "start_date", "label": "วันเริ่มงาน", "type": "date", "required": true},
+    {"name": "probation_days", "label": "ระยะทดลองงาน (วัน)", "type": "number", "required": false},
+    {"name": "job_description", "label": "รายละเอียดงาน", "type": "textarea", "required": false}
+]</field>
+        </record>
+
+        <record id="tmpl_guarantee_agreement" model="legal.document.template">
+            <field name="name">สัญญาค้ำประกัน</field>
+            <field name="code">contract/guarantee-agreement</field>
+            <field name="category">contract</field>
+            <field name="description">สัญญาค้ำประกันหนี้ ค้ำประกันบุคคล</field>
+            <field name="sequence">5</field>
+            <field name="required_fields">[
+    {"name": "guarantor_name", "label": "ชื่อผู้ค้ำประกัน", "type": "text", "required": true},
+    {"name": "guarantor_address", "label": "ที่อยู่ผู้ค้ำประกัน", "type": "address", "required": true},
+    {"name": "debtor_name", "label": "ชื่อลูกหนี้", "type": "text", "required": true},
+    {"name": "creditor_name", "label": "ชื่อเจ้าหนี้", "type": "text", "required": true},
+    {"name": "guaranteed_amount", "label": "จำนวนเงินที่ค้ำประกัน (บาท)", "type": "number", "required": true},
+    {"name": "contract_reference", "label": "อ้างอิงสัญญาหลัก", "type": "text", "required": false}
+]</field>
+        </record>
+
+        <!-- ═══ หนังสือ (Letter) ═══ -->
+
+        <record id="tmpl_demand_letter" model="legal.document.template">
+            <field name="name">หนังสือทวงถาม</field>
+            <field name="code">letter/demand-letter</field>
+            <field name="category">letter</field>
+            <field name="description">หนังสือทวงถามหนี้ เรียกร้องให้ชำระเงิน</field>
+            <field name="sequence">1</field>
+            <field name="required_fields">[
+    {"name": "sender_name", "label": "ชื่อผู้ส่ง (เจ้าหนี้/ทนาย)", "type": "text", "required": true},
+    {"name": "sender_address", "label": "ที่อยู่ผู้ส่ง", "type": "address", "required": true},
+    {"name": "recipient_name", "label": "ชื่อผู้รับ (ลูกหนี้)", "type": "text", "required": true},
+    {"name": "recipient_address", "label": "ที่อยู่ผู้รับ", "type": "address", "required": true},
+    {"name": "debt_amount", "label": "จำนวนหนี้ (บาท)", "type": "number", "required": true},
+    {"name": "debt_description", "label": "รายละเอียดหนี้/มูลหนี้", "type": "textarea", "required": true},
+    {"name": "deadline_days", "label": "กำหนดชำระภายใน (วัน)", "type": "number", "required": true}
+]</field>
+        </record>
+
+        <record id="tmpl_termination_notice" model="legal.document.template">
+            <field name="name">หนังสือบอกเลิกสัญญา</field>
+            <field name="code">letter/termination-notice</field>
+            <field name="category">letter</field>
+            <field name="description">หนังสือบอกเลิกสัญญา แจ้งยกเลิก</field>
+            <field name="sequence">2</field>
+            <field name="required_fields">[
+    {"name": "sender_name", "label": "ชื่อผู้บอกเลิก", "type": "text", "required": true},
+    {"name": "sender_address", "label": "ที่อยู่ผู้บอกเลิก", "type": "address", "required": true},
+    {"name": "recipient_name", "label": "ชื่อคู่สัญญา", "type": "text", "required": true},
+    {"name": "recipient_address", "label": "ที่อยู่คู่สัญญา", "type": "address", "required": true},
+    {"name": "contract_reference", "label": "อ้างอิงสัญญาเดิม (เลขที่/วันที่)", "type": "text", "required": true},
+    {"name": "termination_reason", "label": "เหตุผลในการบอกเลิก", "type": "textarea", "required": true},
+    {"name": "effective_date", "label": "วันที่มีผล", "type": "date", "required": true}
+]</field>
+        </record>
+
+        <record id="tmpl_power_of_attorney" model="legal.document.template">
+            <field name="name">หนังสือมอบอำนาจ</field>
+            <field name="code">letter/power-of-attorney</field>
+            <field name="category">letter</field>
+            <field name="description">มอบอำนาจทั่วไป มอบอำนาจดำเนินคดี</field>
+            <field name="sequence">3</field>
+            <field name="required_fields">[
+    {"name": "grantor_name", "label": "ชื่อผู้มอบอำนาจ", "type": "text", "required": true},
+    {"name": "grantor_id_card", "label": "เลขบัตรประชาชนผู้มอบ", "type": "text", "required": true},
+    {"name": "grantor_address", "label": "ที่อยู่ผู้มอบอำนาจ", "type": "address", "required": true},
+    {"name": "attorney_name", "label": "ชื่อผู้รับมอบอำนาจ", "type": "text", "required": true},
+    {"name": "attorney_id_card", "label": "เลขบัตรประชาชนผู้รับมอบ", "type": "text", "required": true},
+    {"name": "attorney_address", "label": "ที่อยู่ผู้รับมอบอำนาจ", "type": "address", "required": true},
+    {"name": "authority_scope", "label": "อำนาจที่มอบ (รายละเอียด)", "type": "textarea", "required": true}
+]</field>
+        </record>
+
+        <record id="tmpl_consent_letter" model="legal.document.template">
+            <field name="name">หนังสือยินยอม</field>
+            <field name="code">letter/consent-letter</field>
+            <field name="category">letter</field>
+            <field name="description">หนังสือให้ความยินยอม คู่สมรส บุตร</field>
+            <field name="sequence">4</field>
+            <field name="required_fields">[
+    {"name": "consenter_name", "label": "ชื่อผู้ให้ความยินยอม", "type": "text", "required": true},
+    {"name": "consenter_id_card", "label": "เลขบัตรประชาชน", "type": "text", "required": true},
+    {"name": "consenter_address", "label": "ที่อยู่", "type": "address", "required": true},
+    {"name": "consent_to_name", "label": "ยินยอมให้แก่ (ชื่อ)", "type": "text", "required": true},
+    {"name": "consent_detail", "label": "รายละเอียดที่ยินยอม", "type": "textarea", "required": true}
+]</field>
+        </record>
+
+        <!-- ═══ คำร้อง/คำฟ้อง (Petition) ═══ -->
+
+        <record id="tmpl_civil_complaint" model="legal.document.template">
+            <field name="name">คำฟ้องแพ่ง (Draft)</field>
+            <field name="code">petition/civil-complaint</field>
+            <field name="category">petition</field>
+            <field name="description">ร่างคำฟ้องคดีแพ่ง (ต้องทนายตรวจสอบ)</field>
+            <field name="sequence">1</field>
+            <field name="required_fields">[
+    {"name": "court_name", "label": "ศาลที่ฟ้อง", "type": "text", "required": true},
+    {"name": "plaintiff_name", "label": "ชื่อโจทก์", "type": "text", "required": true},
+    {"name": "plaintiff_address", "label": "ที่อยู่โจทก์", "type": "address", "required": true},
+    {"name": "defendant_name", "label": "ชื่อจำเลย", "type": "text", "required": true},
+    {"name": "defendant_address", "label": "ที่อยู่จำเลย", "type": "address", "required": true},
+    {"name": "cause_of_action", "label": "ข้อหา/ฐานความผิด", "type": "text", "required": true},
+    {"name": "facts", "label": "ข้อเท็จจริง", "type": "textarea", "required": true},
+    {"name": "claim_amount", "label": "ทุนทรัพย์ (บาท)", "type": "number", "required": false},
+    {"name": "relief_sought", "label": "คำขอท้ายฟ้อง", "type": "textarea", "required": true}
+]</field>
+        </record>
+
+        <record id="tmpl_defense_statement" model="legal.document.template">
+            <field name="name">คำให้การ (Draft)</field>
+            <field name="code">petition/defense-statement</field>
+            <field name="category">petition</field>
+            <field name="description">ร่างคำให้การจำเลย (ต้องทนายตรวจสอบ)</field>
+            <field name="sequence">2</field>
+            <field name="required_fields">[
+    {"name": "court_name", "label": "ศาล", "type": "text", "required": true},
+    {"name": "case_number", "label": "เลขคดี", "type": "text", "required": true},
+    {"name": "defendant_name", "label": "ชื่อจำเลย", "type": "text", "required": true},
+    {"name": "plaintiff_name", "label": "ชื่อโจทก์", "type": "text", "required": true},
+    {"name": "defense_facts", "label": "ข้อเท็จจริงของจำเลย", "type": "textarea", "required": true},
+    {"name": "defense_points", "label": "ข้อต่อสู้", "type": "textarea", "required": true}
+]</field>
+        </record>
+
+        <!-- ═══ พินัยกรรม (Will) ═══ -->
+
+        <record id="tmpl_will" model="legal.document.template">
+            <field name="name">พินัยกรรม</field>
+            <field name="code">will/testament</field>
+            <field name="category">will</field>
+            <field name="description">พินัยกรรมแบบธรรมดา (ต้องทนายตรวจสอบ)</field>
+            <field name="sequence">1</field>
+            <field name="required_fields">[
+    {"name": "testator_name", "label": "ชื่อผู้ทำพินัยกรรม", "type": "text", "required": true},
+    {"name": "testator_id_card", "label": "เลขบัตรประชาชน", "type": "text", "required": true},
+    {"name": "testator_address", "label": "ที่อยู่", "type": "address", "required": true},
+    {"name": "testator_age", "label": "อายุ", "type": "number", "required": true},
+    {"name": "beneficiaries", "label": "ผู้รับพินัยกรรม (ชื่อ ความสัมพันธ์)", "type": "textarea", "required": true},
+    {"name": "asset_distribution", "label": "ทรัพย์สินและการแบ่ง", "type": "textarea", "required": true},
+    {"name": "executor_name", "label": "ผู้จัดการมรดก (ถ้ามี)", "type": "text", "required": false}
+]</field>
+        </record>
+
+        <!-- ═══ แบบพิมพ์ศาล (Court Form) ═══ -->
+        <!-- ที่มา: ศาลยุติธรรม coj.go.th — ทนายอัปโหลด .doc แล้วกด AI วิเคราะห์ เพื่อสร้าง {{placeholder}} อัตโนมัติ -->
+
+        <!-- คำฟ้อง / คำร้อง -->
+
+        <record id="tmpl_court_complaint" model="legal.document.template">
+            <field name="name">คำฟ้อง (แบบ ๔)</field>
+            <field name="code">court_form/complaint/04</field>
+            <field name="category">court_form</field>
+            <field name="description">แบบพิมพ์คำฟ้องศาล (แพ่ง/อาญา) — ต้องอัปโหลด .doc แล้ว AI วิเคราะห์</field>
+            <field name="sequence">1</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <record id="tmpl_court_complaint_civil_end" model="legal.document.template">
+            <field name="name">คำขอท้ายคำฟ้องแพ่ง (แบบ ๕)</field>
+            <field name="code">court_form/complaint/05</field>
+            <field name="category">court_form</field>
+            <field name="description">คำขอท้ายคำฟ้องคดีแพ่ง</field>
+            <field name="sequence">2</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <record id="tmpl_court_complaint_criminal_end" model="legal.document.template">
+            <field name="name">คำขอท้ายคำฟ้องอาญา (แบบ ๖)</field>
+            <field name="code">court_form/complaint/06</field>
+            <field name="category">court_form</field>
+            <field name="description">คำขอท้ายคำฟ้องคดีอาญา</field>
+            <field name="sequence">3</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <record id="tmpl_court_petition" model="legal.document.template">
+            <field name="name">คำร้อง/คำแถลง/คำขอ (แบบ ๗)</field>
+            <field name="code">court_form/complaint/07</field>
+            <field name="category">court_form</field>
+            <field name="description">คำร้อง คำแถลง หรือคำขอต่อศาล</field>
+            <field name="sequence">4</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <!-- คำให้การ -->
+
+        <record id="tmpl_court_defense" model="legal.document.template">
+            <field name="name">คำให้การจำเลย (แบบ ๑๑)</field>
+            <field name="code">court_form/defense/11</field>
+            <field name="category">court_form</field>
+            <field name="description">แบบพิมพ์คำให้การจำเลย</field>
+            <field name="sequence">10</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <!-- ใบแต่งทนาย / มอบฉันทะ -->
+
+        <record id="tmpl_court_lawyer_appointment" model="legal.document.template">
+            <field name="name">ใบแต่งทนายความ (แบบ ๙)</field>
+            <field name="code">court_form/admin/09</field>
+            <field name="category">court_form</field>
+            <field name="description">ใบแต่งทนายความ</field>
+            <field name="sequence">11</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <record id="tmpl_court_proxy" model="legal.document.template">
+            <field name="name">ใบมอบฉันทะ (แบบ ๑๐)</field>
+            <field name="code">court_form/admin/10</field>
+            <field name="category">court_form</field>
+            <field name="description">ใบมอบฉันทะ</field>
+            <field name="sequence">12</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <!-- พยาน -->
+
+        <record id="tmpl_court_witness_list" model="legal.document.template">
+            <field name="name">บัญชีพยาน (แบบ ๑๕)</field>
+            <field name="code">court_form/witness/15</field>
+            <field name="category">court_form</field>
+            <field name="description">บัญชีพยานฝ่ายโจทก์/จำเลย</field>
+            <field name="sequence">20</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <record id="tmpl_court_witness_testimony" model="legal.document.template">
+            <field name="name">คำเบิกความพยาน (แบบ ๒๑)</field>
+            <field name="code">court_form/witness/21</field>
+            <field name="category">court_form</field>
+            <field name="description">แบบพิมพ์คำเบิกความพยาน</field>
+            <field name="sequence">21</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <!-- อุทธรณ์ / ฎีกา -->
+
+        <record id="tmpl_court_appeal" model="legal.document.template">
+            <field name="name">อุทธรณ์ (แบบ ๓๒)</field>
+            <field name="code">court_form/appeal/32</field>
+            <field name="category">court_form</field>
+            <field name="description">แบบพิมพ์อุทธรณ์</field>
+            <field name="sequence">30</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <record id="tmpl_court_appeal_end" model="legal.document.template">
+            <field name="name">ท้ายอุทธรณ์ (แบบ ๓๓)</field>
+            <field name="code">court_form/appeal/33</field>
+            <field name="category">court_form</field>
+            <field name="description">ท้ายอุทธรณ์</field>
+            <field name="sequence">31</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <record id="tmpl_court_appeal_correction" model="legal.document.template">
+            <field name="name">คำแก้อุทธรณ์ (แบบ ๓๔)</field>
+            <field name="code">court_form/appeal/34</field>
+            <field name="category">court_form</field>
+            <field name="description">คำแก้อุทธรณ์</field>
+            <field name="sequence">32</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <record id="tmpl_court_cassation" model="legal.document.template">
+            <field name="name">ฎีกา (แบบ ๓๖)</field>
+            <field name="code">court_form/appeal/36</field>
+            <field name="category">court_form</field>
+            <field name="description">แบบพิมพ์ฎีกา</field>
+            <field name="sequence">33</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <record id="tmpl_court_cassation_end" model="legal.document.template">
+            <field name="name">ท้ายฎีกา (แบบ ๓๗)</field>
+            <field name="code">court_form/appeal/37</field>
+            <field name="category">court_form</field>
+            <field name="description">ท้ายฎีกา</field>
+            <field name="sequence">34</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <record id="tmpl_court_cassation_correction" model="legal.document.template">
+            <field name="name">คำแก้ฎีกา (แบบ ๓๘)</field>
+            <field name="code">court_form/appeal/38</field>
+            <field name="category">court_form</field>
+            <field name="description">คำแก้ฎีกา</field>
+            <field name="sequence">35</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <!-- สัญญาประนีประนอม / คำพิพากษา -->
+
+        <record id="tmpl_court_settlement" model="legal.document.template">
+            <field name="name">สัญญาประนีประนอมยอมความ (แบบ ๒๙)</field>
+            <field name="code">court_form/settlement/29</field>
+            <field name="category">court_form</field>
+            <field name="description">สัญญาประนีประนอมยอมความ</field>
+            <field name="sequence">40</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <!-- ประกันตัว -->
+
+        <record id="tmpl_court_bail_request" model="legal.document.template">
+            <field name="name">คำร้องขอปล่อยชั่วคราว (แบบ ๕๗)</field>
+            <field name="code">court_form/bail/57</field>
+            <field name="category">court_form</field>
+            <field name="description">คำร้องขอปล่อยตัวชั่วคราว (ประกันตัว)</field>
+            <field name="sequence">50</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <record id="tmpl_court_bail_bond" model="legal.document.template">
+            <field name="name">สัญญาประกัน (แบบ ๕๘)</field>
+            <field name="code">court_form/bail/58</field>
+            <field name="category">court_form</field>
+            <field name="description">สัญญาประกันตัว</field>
+            <field name="sequence">51</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <!-- บังคับคดี -->
+
+        <record id="tmpl_court_seizure" model="legal.document.template">
+            <field name="name">หมายยึดทรัพย์ชั่วคราว (แบบ ๒๔)</field>
+            <field name="code">court_form/enforcement/24</field>
+            <field name="category">court_form</field>
+            <field name="description">หมายยึดทรัพย์ชั่วคราว</field>
+            <field name="sequence">60</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <record id="tmpl_court_enforcement_order" model="legal.document.template">
+            <field name="name">คำบังคับ (แบบ ๔๑)</field>
+            <field name="code">court_form/enforcement/41</field>
+            <field name="category">court_form</field>
+            <field name="description">คำบังคับตามคำพิพากษา</field>
+            <field name="sequence">61</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+        <record id="tmpl_court_enforcement_writ" model="legal.document.template">
+            <field name="name">หมายบังคับคดี (แบบ ๔๒)</field>
+            <field name="code">court_form/enforcement/42</field>
+            <field name="category">court_form</field>
+            <field name="description">หมายบังคับคดี</field>
+            <field name="sequence">62</field>
+            <field name="required_fields">[]</field>
+        </record>
+
+    </data>
+</odoo>

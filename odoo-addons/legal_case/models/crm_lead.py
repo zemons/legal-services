@@ -38,6 +38,7 @@ class CrmLead(models.Model):
     court_date_ids = fields.One2many('legal.court.date', 'lead_id', string='Court Dates')
     court_date_count = fields.Integer(string='Court Dates', compute='_compute_court_date_count')
     case_summary = fields.Text(string='AI Case Summary')
+    event_ids = fields.One2many('legal.case.event', 'lead_id', string='Events')
     line_user_id = fields.Char(string='LINE User ID', related='partner_id.line_user_id', store=True)
     collaborator_ids = fields.Many2many(
         'res.users', 'crm_lead_collaborator_rel', 'lead_id', 'user_id',

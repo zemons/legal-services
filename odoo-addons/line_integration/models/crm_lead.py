@@ -24,9 +24,21 @@ class CrmLead(models.Model):
         old_statuses = {lead.id: lead.case_status for lead in self}
         result = super().write(vals)
         if 'case_status' in vals:
+            status_labels = dict(
+                self._fields['case_status']._description_selection(self.env))
             for lead in self:
-                if old_statuses.get(lead.id) != vals['case_status']:
+                old_status = old_statuses.get(lead.id)
+                if old_status != vals['case_status']:
                     lead._send_line_status_notification()
+                    # Create timeline event
+                    old_label = status_labels.get(old_status, old_status or '-')
+                    new_label = status_labels.get(vals['case_status'], vals['case_status'])
+                    self.env['legal.case.event'].sudo().create({
+                        'lead_id': lead.id,
+                        'event_type': 'status_change',
+                        'title': f'สถานะเปลี่ยนเป็น: {new_label}',
+                        'description': f'{old_label} \u2192 {new_label}',
+                    })
         return result
 
     def _send_line_status_notification(self):

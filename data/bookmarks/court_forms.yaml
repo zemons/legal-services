@@ -1,0 +1,128 @@
+# Court Forms — แบบพิมพ์ศาล
+# แหล่งดาวน์โหลดแบบพิมพ์ศาลต่างๆ (.doc/.docx)
+
+# === ศาลยุติธรรม (ทั่วไป) ===
+
+- name: สำนักงานศาลยุติธรรม — แบบพิมพ์ศาลรวม
+  url: https://www.coj.go.th/th/content/category/detail/id/6/cid/21/iid/67
+  court: ศาลยุติธรรม
+  format: .doc
+  status: downloaded
+  local_path: data/templates/court_form/ (67 ไฟล์, 11 subdirs)
+  notes: >
+    แบบพิมพ์ศาลทั่วไปครบชุด — คำฟ้อง, คำร้อง, หมาย, บัญชีพยาน,
+    อุทธรณ์, ฎีกา, บังคับคดี, ประกันตัว, ประนีประนอม
+    ดาวน์โหลดจาก form_coj_word.zip (96 ไฟล์, เลือก 67)
+
+- name: สำนักงานศาลยุติธรรม — ZIP รวม
+  url: https://www.coj.go.th/th/file/get/file/202503186f6c57ad73ade71810a7f9edac40e45c091524.zip
+  court: ศาลยุติธรรม
+  format: .zip → .doc
+  status: downloaded
+
+# === ศาลแรงงาน ===
+
+- name: ศาลแรงงานกลาง — แบบพิมพ์ (ทางการ)
+  url: https://lbc.coj.go.th/th/content/category/index/id/2765
+  court: ศาลแรงงาน
+  format: .doc/.docx
+  status: pending  # timeout
+  notes: แบบพิมพ์ศาลแรงงานจากเว็บทางการ
+
+- name: siamlegalinter — แบบฟอร์มศาลแรงงาน
+  url: https://siamlegalinter.com/แบบฟอร์มศาล-แรงงาน/
+  court: ศาลแรงงาน
+  format: .doc
+  status: downloaded
+  local_path: data/templates/court_form/labor/ (17 ไฟล์)
+  notes: >
+    คำฟ้อง รง.1, คำร้อง รง.2, ใบแต่งทนาย, บัญชีพยาน,
+    สัญญาประนีประนอม, หมายเรียก, คำให้การ ฯลฯ
+
+- name: ศาลแรงงานภาค 1
+  url: https://lblbrc.coj.go.th/th/content/category/articles/id/35/cid/2772
+  court: ศาลแรงงานภาค 1
+  format: .doc/.docx
+  status: pending
+
+- name: ศาลแรงงานภาค 3 (นครราชสีมา)
+  url: https://lbnksc.coj.go.th/
+  court: ศาลแรงงานภาค 3
+  format: .doc/.docx
+  status: pending
+  notes: มีแบบพิมพ์ 16 แบบ
+
+# === ศาลล้มละลาย ===
+
+- name: ศาลล้มละลายกลาง — แบบพิมพ์ (ทางการ)
+  url: https://cbc.coj.go.th/th/content/category/index/id/35
+  court: ศาลล้มละลาย
+  format: .doc/.docx
+  status: pending  # timeout
+
+- name: siamlegalinter — แบบฟอร์มศาลล้มละลาย
+  url: https://siamlegalinter.com/แบบฟอร์มศาลล้มละลาย/
+  court: ศาลล้มละลาย
+  format: .doc
+  status: downloaded
+  local_path: data/templates/court_form/bankruptcy/ (21 ไฟล์)
+  notes: >
+    คำฟ้อง ล.1, คำให้การ ล.2, หมายเรียก ล.3, บัญชีภูมิลำเนา ล.5,
+    ใบมอบฉันทะ ล.6, ใบแต่งทนาย ล.7, คำร้องฟื้นฟูกิจการ ล.4 ฯลฯ
+
+# === ศาลปกครอง ===
+
+- name: ศาลปกครอง — แบบพิมพ์เกี่ยวกับคดี (ทางการ)
+  url: https://www.admincourt.go.th/admincourt/site/02printform.html
+  court: ศาลปกครอง
+  format: .doc/.pdf
+  status: blocked  # Incapsula
+
+- name: ศาลปกครอง — ดาวน์โหลด (ทางการ)
+  url: https://admincourt.go.th/admincourt/site/10dowload.html
+  court: ศาลปกครอง
+  format: mixed
+  status: blocked  # Incapsula
+
+- name: siamlegalinter — แบบฟอร์มศาลปกครอง
+  url: https://siamlegalinter.com/แบบฟอร์มศาลปกครอง/
+  court: ศาลปกครอง
+  format: .doc
+  status: downloaded
+  local_path: data/templates/court_form/administrative/ (9 ไฟล์)
+  notes: คำฟ้อง, คำให้การ ค.3, คำคัดค้าน ค.4, คำอุทธรณ์, คำแก้อุทธรณ์
+
+# === ศาลคุ้มครองผู้บริโภค ===
+
+- name: siamlegalinter — แบบฟอร์มคดีผู้บริโภค
+  url: https://siamlegalinter.com/แบบฟอร์ม-คดีผู้บริโภค/
+  court: ศาลคุ้มครองผู้บริโภค
+  format: .doc
+  status: downloaded
+  local_path: data/templates/court_form/consumer/ (21 ไฟล์)
+  notes: >
+    คำฟ้อง ผบ.1, คำให้การ ผบ.3, หมายเรียกพยาน ผบ.4,
+    คำสั่งเรียกเอกสาร ผบ.5, บันทึกถ้อยคำ ผบ.6, สัญญาประนีประนอม
+
+# === ศาลทรัพย์สินทางปัญญาฯ ===
+
+- name: ศาลทรัพย์สินทางปัญญาฯ — แบบพิมพ์
+  url: https://ipitc.coj.go.th/th/content/category/articles/id/35/cid/2704
+  court: ศาลทรัพย์สินทางปัญญาฯ
+  format: .doc/.docx
+  status: pending  # timeout
+  notes: คำฟ้อง, ใบแต่งทนาย, บันทึกถ้อยคำ, คำเบิกความพยาน
+
+# === อนุญาโตตุลาการ ===
+
+- name: สถาบันอนุญาโตตุลาการ (TAI)
+  url: https://tai.coj.go.th/th/content/category/articles/id/8/cid/35
+  court: อนุญาโตตุลาการ
+  format: .pdf/.doc
+  status: pending  # timeout
+
+- name: THAC สถาบันอนุญาโตตุลาการ (อิสระ)
+  url: https://thac.or.th/th
+  court: อนุญาโตตุลาการ
+  format: unknown
+  status: pending

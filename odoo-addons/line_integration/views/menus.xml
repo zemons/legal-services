@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- LINE parent menu under Legal -->
+    <menuitem id="menu_line_root"
+              name="LINE"
+              parent="legal_case.menu_legal_root"
+              sequence="30"/>
+
+    <!-- LINE Users -->
+    <menuitem id="menu_line_users"
+              name="LINE Users"
+              parent="menu_line_root"
+              action="action_line_users"
+              sequence="10"/>
+
+    <!-- LINE Notifications -->
     <record id="action_line_notification" model="ir.actions.act_window">
         <field name="name">LINE Notifications</field>
         <field name="res_model">line.notification</field>
@@ -8,9 +22,9 @@
     </record>
 
     <menuitem id="menu_line_notification"
-              name="LINE Notifications"
-              parent="legal_case.menu_legal_root"
+              name="Notifications"
+              parent="menu_line_root"
               action="action_line_notification"
-              sequence="30"/>
+              sequence="20"/>
 
 </odoo>

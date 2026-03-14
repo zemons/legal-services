@@ -7,6 +7,7 @@
             <head>
                 <meta charset="utf-8"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+                <meta name="liff-id" t-att-content="liff_id or '0000000000-xxxxxxxx'"/>
                 <title><t t-esc="page_title or 'Legal Service'"/></title>
                 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
                 <style>
@@ -88,6 +89,8 @@
                         font-family: 'Noto Sans Thai', sans-serif;
                         cursor: pointer;
                         margin-top: 8px;
+                        text-align: center;
+                        text-decoration: none;
                     }
                     .liff-btn:active { background: #27ae60; }
                     .liff-btn-close {
@@ -95,6 +98,12 @@
                         margin-top: 24px;
                     }
                     .liff-btn-close:active { background: #7f8c8d; }
+                    .liff-btn-outline {
+                        background: transparent;
+                        color: #2ECC71;
+                        border: 2px solid #2ECC71;
+                    }
+                    .liff-btn-outline:active { background: #f0faf4; }
                     .liff-error {
                         background: #fdecea;
                         color: #c0392b;
@@ -126,15 +135,306 @@
                         margin: 12px 0;
                     }
                     .text-danger { color: #e74c3c; }
+
+                    /* Badge */
+                    .liff-badge {
+                        display: inline-block;
+                        padding: 4px 12px;
+                        border-radius: 20px;
+                        font-size: 12px;
+                        font-weight: 600;
+                        color: #fff;
+                    }
+                    .liff-badge-lg {
+                        font-size: 14px;
+                        padding: 6px 16px;
+                    }
+
+                    /* Card */
+                    .liff-card {
+                        background: #fff;
+                        border: 1px solid #eee;
+                        border-radius: 12px;
+                        padding: 16px;
+                        margin-bottom: 12px;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+                    }
+                    .liff-card-title {
+                        font-size: 16px;
+                        font-weight: 700;
+                        margin-bottom: 6px;
+                        color: #2C3E50;
+                    }
+                    .liff-card-meta {
+                        font-size: 13px;
+                        color: #7f8c8d;
+                        margin-bottom: 4px;
+                    }
+
+                    /* Timeline */
+                    .liff-timeline {
+                        position: relative;
+                        padding-left: 28px;
+                        margin: 16px 0;
+                    }
+                    .liff-timeline::before {
+                        content: '';
+                        position: absolute;
+                        left: 8px;
+                        top: 4px;
+                        bottom: 4px;
+                        width: 2px;
+                        background: #dfe6e9;
+                    }
+                    .liff-timeline-item {
+                        position: relative;
+                        margin-bottom: 20px;
+                    }
+                    .liff-timeline-dot {
+                        position: absolute;
+                        left: -24px;
+                        top: 4px;
+                        width: 14px;
+                        height: 14px;
+                        border-radius: 50%;
+                        background: #3498db;
+                        border: 2px solid #fff;
+                        box-shadow: 0 0 0 2px #3498db;
+                    }
+                    .liff-timeline-dot.status { background: #2ecc71; box-shadow: 0 0 0 2px #2ecc71; }
+                    .liff-timeline-dot.court { background: #e67e22; box-shadow: 0 0 0 2px #e67e22; }
+                    .liff-timeline-dot.document { background: #9b59b6; box-shadow: 0 0 0 2px #9b59b6; }
+                    .liff-timeline-dot.note { background: #95a5a6; box-shadow: 0 0 0 2px #95a5a6; }
+                    .liff-timeline-date {
+                        font-size: 11px;
+                        color: #95a5a6;
+                        margin-bottom: 2px;
+                    }
+                    .liff-timeline-title {
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: #2C3E50;
+                    }
+                    .liff-timeline-desc {
+                        font-size: 13px;
+                        color: #7f8c8d;
+                        margin-top: 2px;
+                    }
+
+                    /* Section */
+                    .liff-section {
+                        margin: 20px 0 12px;
+                    }
+                    .liff-section-title {
+                        font-size: 16px;
+                        font-weight: 700;
+                        color: #2C3E50;
+                        padding-bottom: 8px;
+                        border-bottom: 2px solid #f0f0f0;
+                        margin-bottom: 12px;
+                    }
+
+                    /* Filter tabs */
+                    .liff-tabs {
+                        display: flex;
+                        gap: 6px;
+                        overflow-x: auto;
+                        padding: 8px 0 12px;
+                        -webkit-overflow-scrolling: touch;
+                    }
+                    .liff-tab {
+                        flex-shrink: 0;
+                        padding: 8px 16px;
+                        border-radius: 20px;
+                        font-size: 13px;
+                        font-weight: 600;
+                        background: #f0f0f0;
+                        color: #7f8c8d;
+                        border: none;
+                        cursor: pointer;
+                        font-family: 'Noto Sans Thai', sans-serif;
+                    }
+                    .liff-tab.active {
+                        background: #2ECC71;
+                        color: #fff;
+                    }
+
+                    /* Spinner */
+                    .liff-spinner {
+                        width: 36px;
+                        height: 36px;
+                        border: 3px solid #f0f0f0;
+                        border-top-color: #2ECC71;
+                        border-radius: 50%;
+                        animation: liff-spin 0.7s linear infinite;
+                        margin: 40px auto;
+                    }
+                    @keyframes liff-spin {
+                        to { transform: rotate(360deg); }
+                    }
+
+                    /* Empty state */
+                    .liff-empty {
+                        text-align: center;
+                        padding: 40px 20px;
+                        color: #95a5a6;
+                    }
+                    .liff-empty-icon {
+                        font-size: 48px;
+                        margin-bottom: 12px;
+                    }
+
+                    /* Court card */
+                    .liff-court-card {
+                        display: flex;
+                        gap: 12px;
+                        align-items: flex-start;
+                        padding: 12px;
+                        background: #fef9f0;
+                        border: 1px solid #f5e6cc;
+                        border-radius: 10px;
+                        margin-bottom: 10px;
+                    }
+                    .liff-court-icon {
+                        font-size: 24px;
+                        flex-shrink: 0;
+                        width: 40px;
+                        height: 40px;
+                        line-height: 40px;
+                        text-align: center;
+                        background: #e67e22;
+                        color: #fff;
+                        border-radius: 10px;
+                    }
+                    .liff-court-info {
+                        flex: 1;
+                    }
+                    .liff-court-date {
+                        font-size: 14px;
+                        font-weight: 700;
+                        color: #e67e22;
+                    }
+                    .liff-court-detail {
+                        font-size: 13px;
+                        color: #7f8c8d;
+                        margin-top: 2px;
+                    }
+
+                    /* Info row */
+                    .liff-info-row {
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 10px 0;
+                        border-bottom: 1px solid #f5f5f5;
+                        font-size: 14px;
+                    }
+                    .liff-info-label {
+                        color: #7f8c8d;
+                    }
+                    .liff-info-value {
+                        font-weight: 600;
+                        text-align: right;
+                        max-width: 60%;
+                    }
+
+                    /* Case card (lawyer dashboard) */
+                    .liff-case-card {
+                        padding: 14px;
+                        border: 1px solid #eee;
+                        border-radius: 12px;
+                        margin-bottom: 10px;
+                        background: #fff;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+                        cursor: pointer;
+                        text-decoration: none;
+                        display: block;
+                        color: inherit;
+                        transition: box-shadow 0.15s;
+                    }
+                    .liff-case-card:active {
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+                    }
+                    .liff-case-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: flex-start;
+                        margin-bottom: 8px;
+                    }
+                    .liff-case-name {
+                        font-size: 15px;
+                        font-weight: 700;
+                        color: #2C3E50;
+                        flex: 1;
+                        margin-right: 8px;
+                    }
+                    .liff-case-client {
+                        font-size: 13px;
+                        color: #7f8c8d;
+                    }
+                    .liff-case-footer {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-top: 8px;
+                    }
+                    .liff-case-court {
+                        font-size: 12px;
+                        color: #e67e22;
+                        font-weight: 600;
+                    }
+
+                    /* Lawyer header */
+                    .liff-lawyer-header {
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                        padding: 16px 0;
+                    }
+                    .liff-lawyer-avatar {
+                        width: 48px;
+                        height: 48px;
+                        border-radius: 50%;
+                        background: #2ECC71;
+                        color: #fff;
+                        font-size: 22px;
+                        font-weight: 700;
+                        line-height: 48px;
+                        text-align: center;
+                        flex-shrink: 0;
+                    }
+                    .liff-lawyer-info h2 {
+                        font-size: 18px;
+                        text-align: left;
+                    }
+                    .liff-lawyer-info .liff-subtitle {
+                        text-align: left;
+                    }
                 </style>
             </head>
             <body>
                 <t t-raw="0"/>
+                <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+                <script t-att-src="'/legal_liff/static/src/js/liff_common.js'"></script>
+                <t t-raw="page_scripts or ''"/>
             </body>
         </html>
     </template>
 
-    <!-- Intake Form Page -->
+    <!-- Error Page -->
+    <template id="liff_error_page" name="LIFF Error Page">
+        <t t-call="legal_liff.liff_base_layout">
+            <t t-set="page_title">Error</t>
+            <div class="liff-container">
+                <div class="liff-success">
+                    <div class="liff-success-icon" style="background: #e74c3c;">!</div>
+                    <h2><t t-esc="message or 'เกิดข้อผิดพลาด'"/></h2>
+                    <button class="liff-btn liff-btn-close" onclick="LiffApp.closeWindow()">ปิด</button>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ─── Intake Form Page ─────────────────────────────── -->
     <template id="liff_intake_page" name="LIFF Intake Form">
         <t t-call="legal_liff.liff_base_layout">
             <t t-set="page_title">ปรึกษาทนายความ</t>
@@ -155,7 +455,7 @@
 
                     <div class="liff-field">
                         <label>ชื่อ-นามสกุล <span class="text-danger">*</span></label>
-                        <input type="text" name="name" id="name" required=""
+                        <input type="text" name="name" id="liff_name" required=""
                                placeholder="กรอกชื่อ-นามสกุล"
                                t-att-value="values.get('name', '') if values else ''"/>
                     </div>
@@ -190,21 +490,15 @@
                 </form>
             </div>
 
-            <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
             <script>
                 (async function() {
-                    try {
-                        await liff.init({ liffId: '0000000000-xxxxxxxx' });
-                        if (liff.isLoggedIn()) {
-                            var profile = await liff.getProfile();
-                            document.getElementById('line_user_id').value = profile.userId;
-                            var nameField = document.getElementById('name');
-                            if (!nameField.value) {
-                                nameField.value = profile.displayName;
-                            }
+                    var profile = await LiffApp.init();
+                    if (profile) {
+                        document.getElementById('line_user_id').value = profile.userId;
+                        var nameField = document.getElementById('liff_name');
+                        if (!nameField.value) {
+                            nameField.value = profile.displayName;
                         }
-                    } catch(e) {
-                        console.log('LIFF init:', e);
                     }
                 })();
             </script>
@@ -224,25 +518,732 @@
                     <p class="liff-ref">เลขที่อ้างอิง: <strong>#<t t-esc="lead.id"/></strong></p>
                     <p class="liff-subtitle">ทนายความจะตรวจสอบข้อมูลและติดต่อกลับโดยเร็วค่ะ</p>
 
-                    <button class="liff-btn liff-btn-close" onclick="closeLiff()">ปิด</button>
+                    <button class="liff-btn liff-btn-close" onclick="LiffApp.closeWindow()">ปิด</button>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ─── Status Timeline Page ─────────────────────────── -->
+    <template id="liff_status_page" name="LIFF Case Status">
+        <t t-call="legal_liff.liff_base_layout">
+            <t t-set="page_title">สถานะคดี</t>
+
+            <div class="liff-container">
+                <!-- Case Header -->
+                <div class="liff-header">
+                    <h2><t t-esc="lead.name"/></h2>
+                    <p class="liff-subtitle">เลขที่ #<t t-esc="lead.id"/></p>
+                    <div style="margin-top: 10px;">
+                        <span class="liff-badge liff-badge-lg" t-att-style="'background:' + status_color">
+                            <t t-esc="status_label"/>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Case Info -->
+                <div class="liff-section">
+                    <div class="liff-section-title">ข้อมูลคดี</div>
+                    <div class="liff-info-row">
+                        <span class="liff-info-label">ประเภทคดี</span>
+                        <span class="liff-info-value"><t t-esc="case_type_label"/></span>
+                    </div>
+                    <t t-if="lead.opposing_party">
+                        <div class="liff-info-row">
+                            <span class="liff-info-label">คู่กรณี</span>
+                            <span class="liff-info-value"><t t-esc="lead.opposing_party"/></span>
+                        </div>
+                    </t>
+                    <t t-if="lead.court_id">
+                        <div class="liff-info-row">
+                            <span class="liff-info-label">ศาล</span>
+                            <span class="liff-info-value"><t t-esc="lead.court_id.name"/></span>
+                        </div>
+                    </t>
+                    <t t-if="lead.user_id">
+                        <div class="liff-info-row">
+                            <span class="liff-info-label">ทนายผู้รับผิดชอบ</span>
+                            <span class="liff-info-value"><t t-esc="lead.user_id.name"/></span>
+                        </div>
+                    </t>
+                    <t t-if="lead.statute_deadline">
+                        <div class="liff-info-row">
+                            <span class="liff-info-label">อายุความ</span>
+                            <span class="liff-info-value" style="color: #e74c3c;">
+                                <t t-esc="lead.statute_deadline" t-options='{"widget": "date", "format": "d MMM yyyy"}'/>
+                            </span>
+                        </div>
+                    </t>
+                </div>
+
+                <!-- Upcoming Court Dates -->
+                <t t-if="upcoming_courts">
+                    <div class="liff-section">
+                        <div class="liff-section-title">นัดศาลที่กำลังจะมาถึง</div>
+                        <t t-foreach="upcoming_courts" t-as="court">
+                            <div class="liff-court-card">
+                                <div class="liff-court-icon">&#9878;</div>
+                                <div class="liff-court-info">
+                                    <div class="liff-court-date">
+                                        <t t-esc="court.date_time" t-options='{"widget": "datetime", "format": "d MMM yyyy HH:mm"}'/>
+                                    </div>
+                                    <div class="liff-court-detail">
+                                        <t t-esc="purpose_labels.get(court.purpose, '')"/>
+                                        <t t-if="court.court_id"> | <t t-esc="court.court_id.name"/></t>
+                                        <t t-if="court.room"> | ห้อง <t t-esc="court.room"/></t>
+                                    </div>
+                                    <t t-if="court.notes">
+                                        <div class="liff-court-detail"><t t-esc="court.notes"/></div>
+                                    </t>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+
+                <!-- Timeline -->
+                <div class="liff-section">
+                    <div class="liff-section-title">ไทม์ไลน์</div>
+                    <t t-if="events">
+                        <div class="liff-timeline">
+                            <t t-foreach="events" t-as="ev">
+                                <div class="liff-timeline-item">
+                                    <div t-attf-class="liff-timeline-dot #{ev.event_type == 'status_change' and 'status' or ev.event_type == 'court_date' and 'court' or ev.event_type == 'document' and 'document' or 'note'}"></div>
+                                    <div class="liff-timeline-date">
+                                        <t t-esc="ev.date" t-options='{"widget": "datetime", "format": "d MMM yyyy HH:mm"}'/>
+                                    </div>
+                                    <div class="liff-timeline-title"><t t-esc="ev.title"/></div>
+                                    <t t-if="ev.description">
+                                        <div class="liff-timeline-desc"><t t-esc="ev.description"/></div>
+                                    </t>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <div class="liff-empty">
+                            <div class="liff-empty-icon">&#128203;</div>
+                            <p>ยังไม่มีกิจกรรม</p>
+                        </div>
+                    </t>
+                </div>
+
+                <!-- Past Court Dates (collapsed) -->
+                <t t-if="past_courts">
+                    <div class="liff-section">
+                        <div class="liff-section-title">นัดศาลที่ผ่านมา</div>
+                        <t t-foreach="past_courts" t-as="court">
+                            <div class="liff-court-card" style="opacity: 0.7;">
+                                <div class="liff-court-icon" style="background: #95a5a6;">&#9878;</div>
+                                <div class="liff-court-info">
+                                    <div class="liff-court-date" style="color: #95a5a6;">
+                                        <t t-esc="court.date_time" t-options='{"widget": "datetime", "format": "d MMM yyyy HH:mm"}'/>
+                                    </div>
+                                    <div class="liff-court-detail">
+                                        <t t-esc="purpose_labels.get(court.purpose, '')"/>
+                                        <t t-if="court.court_id"> | <t t-esc="court.court_id.name"/></t>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+
+                <button class="liff-btn liff-btn-close" onclick="LiffApp.closeWindow()">ปิด</button>
+            </div>
+        </t>
+    </template>
+
+    <!-- ─── Lawyer Cases Dashboard ───────────────────────── -->
+    <template id="liff_cases_page" name="LIFF Lawyer Dashboard">
+        <t t-call="legal_liff.liff_base_layout">
+            <t t-set="page_title">คดีของฉัน</t>
+
+            <div class="liff-container">
+                <!-- Header (filled by JS) -->
+                <div id="lawyer-header" class="liff-lawyer-header" style="display:none;">
+                    <div class="liff-lawyer-avatar" id="lawyer-avatar"></div>
+                    <div class="liff-lawyer-info">
+                        <h2 id="lawyer-name"></h2>
+                        <p class="liff-subtitle" id="lawyer-count"></p>
+                    </div>
+                </div>
+
+                <!-- Filter Tabs -->
+                <div class="liff-tabs" id="filter-tabs">
+                    <button class="liff-tab active" data-filter="all">ทั้งหมด</button>
+                    <button class="liff-tab" data-filter="active">กำลังดำเนินการ</button>
+                    <button class="liff-tab" data-filter="court">นัดศาล</button>
+                    <button class="liff-tab" data-filter="closed">ปิดคดี</button>
+                </div>
+
+                <!-- Cases List -->
+                <div id="cases-list">
+                    <div class="liff-spinner"></div>
+                </div>
+
+                <!-- Auth error (hidden by default) -->
+                <div id="auth-error" style="display:none;">
+                    <div class="liff-empty">
+                        <div class="liff-empty-icon">&#128274;</div>
+                        <p id="auth-error-msg">เฉพาะทนายความเท่านั้น</p>
+                    </div>
+                    <button class="liff-btn liff-btn-close" onclick="LiffApp.closeWindow()">ปิด</button>
                 </div>
             </div>
 
-            <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
             <script>
-                function closeLiff() {
+                var STATUS_LABELS = <t t-raw="status_labels"/>;
+                var STATUS_COLORS = <t t-raw="status_colors"/>;
+                var CASE_TYPE_LABELS = <t t-raw="case_type_labels"/>;
+
+                var currentFilter = 'all';
+
+                async function loadCases(filter) {
+                    currentFilter = filter || 'all';
+                    var listEl = document.getElementById('cases-list');
+                    listEl.innerHTML = '<div class="liff-spinner"></div>';
+
                     try {
-                        if (typeof liff !== 'undefined' &amp;&amp; liff.isInClient()) {
-                            liff.closeWindow();
-                        } else {
-                            window.close();
+                        var result = await LiffApp.fetchJson('/liff/cases/data', {
+                            line_user_id: LiffApp.getUserId(),
+                            status_filter: currentFilter,
+                        });
+
+                        if (result.error) {
+                            document.getElementById('cases-list').style.display = 'none';
+                            document.getElementById('filter-tabs').style.display = 'none';
+                            document.getElementById('auth-error').style.display = 'block';
+                            document.getElementById('auth-error-msg').textContent = result.message || 'ไม่มีสิทธิ์เข้าถึง';
+                            return;
                         }
+
+                        // Update header
+                        var headerEl = document.getElementById('lawyer-header');
+                        headerEl.style.display = 'flex';
+                        document.getElementById('lawyer-name').textContent = result.lawyer_name;
+                        document.getElementById('lawyer-avatar').textContent = (result.lawyer_name || '?')[0];
+                        document.getElementById('lawyer-count').textContent = result.total + ' คดี';
+
+                        // Render cases
+                        if (!result.cases || result.cases.length === 0) {
+                            listEl.innerHTML = '<div class="liff-empty"><div class="liff-empty-icon">&#128194;</div><p>ไม่มีคดี</p></div>';
+                            return;
+                        }
+
+                        var html = '';
+                        for (var i = 0; i &lt; result.cases.length; i++) {
+                            var c = result.cases[i];
+                            var statusLabel = STATUS_LABELS[c.case_status] || c.case_status;
+                            var statusColor = STATUS_COLORS[c.case_status] || '#95a5a6';
+                            var typeLabel = CASE_TYPE_LABELS[c.case_type] || c.case_type;
+                            var courtInfo = '';
+                            if (c.next_court_date) {
+                                courtInfo = LiffApp.formatDateTime(c.next_court_date);
+                            }
+
+                            html += '<a class="liff-case-card" href="/liff/status/' + c.id + '">'
+                                + '<div class="liff-case-header">'
+                                + '<span class="liff-case-name">' + escHtml(c.name) + '</span>'
+                                + '<span class="liff-badge" style="background:' + statusColor + '">' + escHtml(statusLabel) + '</span>'
+                                + '</div>'
+                                + '<div class="liff-case-client">' + escHtml(c.partner_name) + ' | ' + escHtml(typeLabel) + '</div>'
+                                + '<div class="liff-case-footer">'
+                                + (courtInfo ? '<span class="liff-case-court">&#9878; ' + courtInfo + '</span>' : '<span></span>')
+                                + '</div>'
+                                + '</a>';
+                        }
+                        listEl.innerHTML = html;
+
                     } catch(e) {
-                        window.close();
+                        listEl.innerHTML = '<div class="liff-error">โหลดข้อมูลไม่ได้: ' + escHtml(e.message) + '</div>';
                     }
                 }
+
+                function escHtml(s) {
+                    if (!s) return '';
+                    var d = document.createElement('div');
+                    d.textContent = s;
+                    return d.innerHTML;
+                }
+
+                // Tab click handler
+                document.getElementById('filter-tabs').addEventListener('click', function(e) {
+                    var btn = e.target.closest('.liff-tab');
+                    if (!btn) return;
+                    document.querySelectorAll('.liff-tab').forEach(function(t) { t.classList.remove('active'); });
+                    btn.classList.add('active');
+                    loadCases(btn.getAttribute('data-filter'));
+                });
+
+                // Init
+                (async function() {
+                    await LiffApp.init();
+                    if (!LiffApp.getUserId()) {
+                        document.getElementById('cases-list').style.display = 'none';
+                        document.getElementById('filter-tabs').style.display = 'none';
+                        document.getElementById('auth-error').style.display = 'block';
+                        document.getElementById('auth-error-msg').textContent = 'กรุณาเปิดผ่าน LINE';
+                        return;
+                    }
+                    loadCases('all');
+                })();
             </script>
         </t>
+    </template>
+
+    <!-- ─── Document Create Page (No LIFF SDK) ────────────────────────── -->
+    <template id="liff_document_create_page" name="LIFF Document Create">
+        <html>
+            <head>
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+                <title>สร้างเอกสาร</title>
+                <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+                <style>
+                    * { box-sizing: border-box; margin: 0; padding: 0; }
+                    body { font-family: 'Noto Sans Thai', sans-serif; background: #f5f6fa; color: #2C3E50; -webkit-text-size-adjust: 100%; }
+                    .liff-container { max-width: 480px; margin: 0 auto; padding: 16px; background: #fff; min-height: 100vh; }
+                    .liff-header { text-align: center; padding: 20px 0 10px; }
+                    .liff-header h2 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+                    .liff-subtitle { color: #7f8c8d; font-size: 14px; }
+                    .liff-field { margin-bottom: 16px; }
+                    .liff-field label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+                    .liff-field input, .liff-field select, .liff-field textarea {
+                        width: 100%; padding: 12px; border: 1.5px solid #dfe6e9; border-radius: 10px;
+                        font-size: 16px; font-family: 'Noto Sans Thai', sans-serif; background: #f8f9fa; -webkit-appearance: none;
+                    }
+                    .liff-field input:focus, .liff-field select:focus, .liff-field textarea:focus { border-color: #2ECC71; outline: none; background: #fff; }
+                    .liff-field textarea { resize: vertical; min-height: 120px; }
+                    .liff-field select {
+                        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%237f8c8d'/%3E%3C/svg%3E");
+                        background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px;
+                    }
+                    .addr-group .addr-house { margin-bottom: 6px; }
+                    .addr-group .addr-search { margin-bottom: 0; }
+                    .addr-results div:last-child { border-bottom: none; }
+                    .liff-btn { display: block; width: 100%; padding: 14px; background: #2ECC71; color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; font-family: 'Noto Sans Thai', sans-serif; cursor: pointer; margin-top: 8px; text-align: center; text-decoration: none; }
+                    .liff-btn:active { background: #27ae60; }
+                    .liff-spinner { width: 36px; height: 36px; border: 3px solid #f0f0f0; border-top-color: #2ECC71; border-radius: 50%; animation: liff-spin 0.7s linear infinite; margin: 40px auto; }
+                    @keyframes liff-spin { to { transform: rotate(360deg); } }
+                    .text-danger { color: #e74c3c; }
+                    .liff-error { background: #fdecea; color: #c0392b; padding: 12px; border-radius: 10px; font-size: 14px; margin-bottom: 16px; }
+                </style>
+            </head>
+            <body>
+                <div class="liff-container">
+                    <div class="liff-header">
+                        <h2>สร้างเอกสาร</h2>
+                        <p class="liff-subtitle">เลือกประเภทเอกสารและกรอกข้อมูล</p>
+                    </div>
+
+                    <!-- Auth error (hidden) -->
+                    <div id="auth-error" style="display:none;">
+                        <div style="text-align:center;padding:40px 20px;color:#95a5a6;">
+                            <div style="font-size:48px;margin-bottom:12px;">&#128274;</div>
+                            <p id="auth-error-msg">เฉพาะทนายความเท่านั้น</p>
+                        </div>
+                    </div>
+
+                    <!-- Main content -->
+                    <div id="doc-main" style="display:none;">
+
+                        <!-- Category dropdown -->
+                        <div class="liff-field">
+                            <label>ประเภทเอกสาร <span class="text-danger">*</span></label>
+                            <select id="sel-category" onchange="onCategoryChange()">
+                                <option value="">-- เลือกประเภท --</option>
+                                <option value="contract">สัญญา</option>
+                                <option value="letter">หนังสือ</option>
+                                <option value="petition">คำร้อง/คำฟ้อง</option>
+                                <option value="will">พินัยกรรม</option>
+                                <option value="court_form">แบบพิมพ์ศาล</option>
+                            </select>
+                        </div>
+
+                        <!-- Template dropdown -->
+                        <div class="liff-field" id="tmpl-field" style="display:none;">
+                            <label>รูปแบบเอกสาร <span class="text-danger">*</span></label>
+                            <select id="sel-template" onchange="onTemplateChange()">
+                                <option value="">-- เลือกรูปแบบ --</option>
+                            </select>
+                            <p id="tmpl-desc" style="font-size:13px;color:#7f8c8d;margin-top:6px;"></p>
+                        </div>
+
+                        <!-- Link to case (optional) -->
+                        <div class="liff-field" id="case-field" style="display:none;">
+                            <label>เชื่อมกับคดี (ไม่บังคับ)</label>
+                            <select id="sel-case">
+                                <option value="">-- ไม่เชื่อมกับคดี --</option>
+                            </select>
+                        </div>
+
+                        <!-- Dynamic form fields -->
+                        <div id="dynamic-fields"></div>
+
+                        <!-- Submit -->
+                        <div id="submit-area" style="display:none;">
+                            <button class="liff-btn" id="btn-submit" onclick="submitDocument()">สร้างเอกสาร</button>
+                        </div>
+
+                        <!-- Loading -->
+                        <div id="generating" style="display:none;text-align:center;padding:40px 0;">
+                            <div class="liff-spinner"></div>
+                            <p id="gen-msg" style="margin-top:16px;color:#7f8c8d;font-size:16px;">กำลังสร้างเอกสาร...</p>
+                            <p id="gen-sub" style="color:#b2bec3;font-size:13px;">รอสักครู่</p>
+                        </div>
+
+                        <!-- Success -->
+                        <div id="submit-success" style="display:none;padding:20px 0;">
+                            <div style="text-align:center;">
+                                <div style="font-size:60px;margin-bottom:8px;">&#x2705;</div>
+                                <h3 style="color:#2ecc71;margin:0 0 4px;">สร้างเอกสารสำเร็จ!</h3>
+                                <p id="success-tmpl-name" style="color:#2C3E50;font-weight:600;font-size:16px;margin:4px 0;"></p>
+                                <p id="success-desc" style="color:#7f8c8d;font-size:13px;margin:0 0 20px;">พร้อมดาวน์โหลด</p>
+                            </div>
+
+                            <!-- Download buttons -->
+                            <div style="display:flex;gap:10px;margin-bottom:12px;">
+                                <a id="dl-pdf" href="#" class="liff-btn" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;font-size:15px;">
+                                    PDF
+                                </a>
+                                <a id="dl-docx" href="#" class="liff-btn" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;font-size:15px;background:#3498db;">
+                                    Word
+                                </a>
+                            </div>
+
+                            <!-- View draft detail -->
+                            <a id="draft-link" href="#" class="liff-btn" style="display:block;text-decoration:none;background:#9b59b6;margin-bottom:8px;">
+                                ดูรายละเอียดเอกสาร
+                            </a>
+
+                            <!-- Create new -->
+                            <button class="liff-btn" style="background:#95a5a6;margin-top:4px;" onclick="location.href='/liff/document/create'">
+                                สร้างเอกสารใหม่
+                            </button>
+                        </div>
+
+                        <!-- Error -->
+                        <div id="submit-error" style="display:none;text-align:center;padding:40px 0;">
+                            <div style="font-size:48px;margin-bottom:12px;">&#x26A0;</div>
+                            <h3 style="color:#e74c3c;margin:0 0 8px;">เกิดข้อผิดพลาด</h3>
+                            <p id="error-msg" style="color:#7f8c8d;margin:0 0 20px;font-size:14px;"></p>
+                            <button class="liff-btn" style="background:#e74c3c;" onclick="location.reload()">ลองใหม่</button>
+                        </div>
+                    </div>
+
+                    <!-- Initial loading -->
+                    <div id="init-loading" style="text-align:center;padding:40px 0;">
+                        <div class="liff-spinner"></div>
+                        <p style="margin-top:16px;color:#7f8c8d;">กำลังโหลด...</p>
+                    </div>
+                </div>
+
+                <script>
+                    // Debug: check if page loaded
+                    console.log('[doc-create] page loaded');
+                </script>
+                <script src="/legal_liff/static/src/js/liff_document_create.js?v=20260311b"></script>
+                <script>
+                    // Fallback: if main script didn't run after 3s, retry inline
+                    setTimeout(function() {
+                        var loading = document.getElementById('init-loading');
+                        if (loading &amp;&amp; loading.style.display !== 'none') {
+                            console.log('[doc-create] fallback: main script may not have loaded, retrying inline');
+                            fetch('/liff/document/create/data', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ jsonrpc: '2.0', method: 'call', params: { line_user_id: '' } })
+                            })
+                            .then(function(r) { return r.json(); })
+                            .then(function(j) {
+                                loading.style.display = 'none';
+                                if (j.error) {
+                                    document.getElementById('auth-error').style.display = 'block';
+                                    document.getElementById('auth-error-msg').textContent = j.error.message || 'Error';
+                                    return;
+                                }
+                                var res = j.result;
+                                if (typeof allTemplates !== 'undefined') {
+                                    allTemplates = res.templates || [];
+                                    allCases = res.cases || [];
+                                }
+                                document.getElementById('doc-main').style.display = 'block';
+                            })
+                            .catch(function(e) {
+                                loading.style.display = 'none';
+                                document.getElementById('auth-error').style.display = 'block';
+                                document.getElementById('auth-error-msg').textContent = 'โหลดไม่ได้: ' + e.message;
+                            });
+                        }
+                    }, 3000);
+                </script>
+            </body>
+        </html>
+    </template>
+
+    <!-- ─── Document Draft View Page (No LIFF SDK) ─────────────────────── -->
+    <template id="liff_document_draft_page" name="LIFF Document Draft">
+        <html>
+            <head>
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+                <title>ร่างเอกสาร</title>
+                <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+                <style>
+                    * { box-sizing: border-box; margin: 0; padding: 0; }
+                    body { font-family: 'Noto Sans Thai', sans-serif; background: #f5f6fa; color: #2C3E50; -webkit-text-size-adjust: 100%; }
+                    .liff-container { max-width: 480px; margin: 0 auto; padding: 16px; background: #fff; min-height: 100vh; }
+                    .liff-header { text-align: center; padding: 20px 0 10px; }
+                    .liff-header h2 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+                    .liff-subtitle { color: #7f8c8d; font-size: 14px; }
+                    .liff-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; color: #fff; }
+                    .liff-badge-lg { font-size: 14px; padding: 6px 16px; }
+                    .liff-btn { display: block; width: 100%; padding: 14px; background: #2ECC71; color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; font-family: 'Noto Sans Thai', sans-serif; cursor: pointer; margin-top: 8px; text-align: center; text-decoration: none; }
+                    .liff-btn:active { background: #27ae60; }
+                    .liff-btn-outline { background: transparent; color: #2ECC71; border: 2px solid #2ECC71; }
+                    .liff-btn-outline:active { background: #f0faf4; }
+                    .liff-btn-close { background: #95a5a6; margin-top: 24px; }
+                    .liff-btn-close:active { background: #7f8c8d; }
+                    .liff-info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f5f5f5; font-size: 14px; }
+                    .liff-info-label { color: #7f8c8d; }
+                    .liff-info-value { font-weight: 600; text-align: right; max-width: 60%; }
+                    .liff-section { margin: 20px 0 12px; }
+                    .liff-section-title { font-size: 16px; font-weight: 700; color: #2C3E50; padding-bottom: 8px; border-bottom: 2px solid #f0f0f0; margin-bottom: 12px; }
+                </style>
+            </head>
+            <body>
+                <div class="liff-container">
+                    <div class="liff-header">
+                        <h2><t t-esc="draft.template_id.name or 'เอกสาร'"/></h2>
+                        <p class="liff-subtitle"><t t-esc="draft.name"/></p>
+                        <div style="margin-top: 10px;">
+                            <t t-set="state_colors" t-value="{'generating':'#f39c12','draft':'#3498db','sent_to_client':'#9b59b6','revision':'#e67e22','final':'#2ecc71','signed':'#27ae60','cancelled':'#95a5a6','expired':'#bdc3c7'}"/>
+                            <t t-set="state_labels" t-value="{'generating':'กำลังสร้าง','draft':'ร่าง','sent_to_client':'ส่งลูกค้า','revision':'แก้ไข','final':'ฉบับสมบูรณ์','signed':'ลงนามแล้ว','cancelled':'ยกเลิก','expired':'หมดอายุ'}"/>
+                            <span class="liff-badge liff-badge-lg"
+                                  t-attf-style="background:#{state_colors.get(draft.state, '#999')};">
+                                <t t-esc="state_labels.get(draft.state, draft.state)"/>
+                            </span>
+                            <t t-if="draft.revision_count > 0">
+                                <span style="font-size:12px;color:#7f8c8d;margin-left:8px;">
+                                    แก้ไขครั้งที่ <t t-esc="draft.revision_count"/>
+                                </span>
+                            </t>
+                        </div>
+                    </div>
+
+                    <t t-if="draft.lead_id">
+                        <div class="liff-info-row">
+                            <span class="liff-info-label">คดี</span>
+                            <span class="liff-info-value"><t t-esc="draft.lead_id.name"/></span>
+                        </div>
+                    </t>
+
+                    <!-- Document content -->
+                    <div class="liff-section">
+                        <div class="liff-section-title">เนื้อหาเอกสาร</div>
+                        <div id="doc-content" style="background:#fafafa;border:1px solid #eee;border-radius:10px;padding:16px;font-size:14px;line-height:1.8;white-space:pre-wrap;word-wrap:break-word;">
+                            <t t-esc="draft.draft_content or 'กำลังสร้างเอกสาร...'"/>
+                        </div>
+                    </div>
+
+                    <!-- Revision Notes -->
+                    <t t-if="draft.state == 'revision' and draft.revision_notes">
+                        <div class="liff-section">
+                            <div class="liff-section-title">หมายเหตุแก้ไข</div>
+                            <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:10px;padding:12px;font-size:14px;">
+                                <t t-esc="draft.revision_notes"/>
+                            </div>
+                        </div>
+                    </t>
+
+                    <!-- Download (draft+) -->
+                    <t t-if="draft.state in ('draft','sent_to_client','revision','final','signed')">
+                        <div class="liff-section">
+                            <div class="liff-section-title">ดาวน์โหลดเอกสาร</div>
+                            <div style="display:flex;gap:10px;">
+                                <a t-attf-href="/liff/document/draft/#{draft.id}/download?fmt=pdf"
+                                   class="liff-btn" style="flex:1;background:#e74c3c;text-align:center;">
+                                    PDF
+                                </a>
+                                <a t-attf-href="/liff/document/draft/#{draft.id}/download?fmt=docx"
+                                   class="liff-btn" style="flex:1;background:#2980b9;text-align:center;">
+                                    Word
+                                </a>
+                            </div>
+                        </div>
+                    </t>
+
+                    <!-- State Actions -->
+                    <div style="margin-top:20px;" id="action-buttons">
+                        <!-- Lawyer actions -->
+                        <t t-if="draft.state == 'draft'">
+                            <button class="liff-btn" style="background:#9b59b6;margin-bottom:10px;"
+                                    onclick="doAction('send_to_client')">ส่งให้ลูกค้า</button>
+                            <button class="liff-btn" style="background:#2ecc71;margin-bottom:10px;"
+                                    onclick="doAction('finalize')">ยืนยันฉบับสมบูรณ์</button>
+                        </t>
+                        <t t-if="draft.state == 'revision'">
+                            <button class="liff-btn" style="background:#3498db;margin-bottom:10px;"
+                                    onclick="doAction('back_to_draft')">กลับเป็นร่าง (แก้ไข)</button>
+                        </t>
+                        <t t-if="draft.state == 'sent_to_client'">
+                            <button class="liff-btn" style="background:#2ecc71;margin-bottom:10px;"
+                                    onclick="doAction('finalize')">ยืนยันฉบับสมบูรณ์</button>
+                            <button class="liff-btn" style="background:#e67e22;margin-bottom:10px;"
+                                    onclick="showRevisionForm()">ขอแก้ไข</button>
+                        </t>
+                        <t t-if="draft.state == 'final'">
+                            <button class="liff-btn" style="background:#27ae60;margin-bottom:10px;"
+                                    onclick="doAction('sign')">ยืนยันลงนามแล้ว</button>
+                        </t>
+
+                        <!-- Cancel (except signed/expired) -->
+                        <t t-if="draft.state not in ('signed','expired','cancelled','generating')">
+                            <button class="liff-btn" style="background:#e74c3c;margin-bottom:10px;"
+                                    onclick="if(confirm('ยืนยันยกเลิกเอกสาร?'))doAction('cancel')">ยกเลิก</button>
+                        </t>
+
+                        <button class="liff-btn" onclick="copyContent()" style="margin-bottom:10px;background:#34495e;">คัดลอกเนื้อหา</button>
+                        <a class="liff-btn liff-btn-outline" href="/liff/documents" style="display:block;margin-bottom:10px;text-align:center;">เอกสารทั้งหมด</a>
+                        <button class="liff-btn liff-btn-outline" onclick="window.location.href='/liff/document/create'">สร้างเอกสารใหม่</button>
+                        <button class="liff-btn liff-btn-close" onclick="window.close()">ปิด</button>
+                    </div>
+
+                    <!-- Revision Form (hidden) -->
+                    <div id="revision-form" style="display:none;margin-top:16px;">
+                        <div class="liff-section-title">หมายเหตุการแก้ไข</div>
+                        <textarea id="revision-notes" rows="3"
+                                  style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-family:'Noto Sans Thai',sans-serif;font-size:14px;"
+                                  placeholder="ระบุสิ่งที่ต้องการแก้ไข..."></textarea>
+                        <button class="liff-btn" style="background:#e67e22;margin-top:8px;"
+                                onclick="submitRevision()">ส่งคำขอแก้ไข</button>
+                    </div>
+                </div>
+
+                <script src="/legal_liff/static/src/js/liff_document_draft.js"></script>
+            </body>
+        </html>
+    </template>
+
+    <!-- ─── Document List Page ───────────────────────────────── -->
+    <template id="liff_document_list_page" name="LIFF Document List">
+        <html>
+            <head>
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+                <title>เอกสารของฉัน</title>
+                <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+                <style>
+                    * { box-sizing: border-box; margin: 0; padding: 0; }
+                    body { font-family: 'Noto Sans Thai', sans-serif; background: #f5f6fa; color: #2C3E50; }
+                    .liff-container { max-width: 480px; margin: 0 auto; padding: 16px; min-height: 100vh; }
+                    .liff-header { text-align: center; padding: 20px 0 16px; }
+                    .liff-header h2 { font-size: 22px; font-weight: 700; }
+                    .doc-card { background: #fff; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); display: block; text-decoration: none; color: inherit; }
+                    .doc-card:active { background: #f8f9fa; }
+                    .doc-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; color: #2C3E50; }
+                    .doc-meta { font-size: 12px; color: #7f8c8d; }
+                    .doc-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; color: #fff; margin-left: 6px; vertical-align: middle; }
+                    .doc-empty { text-align: center; padding: 60px 20px; color: #95a5a6; }
+                    .filter-bar { display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; }
+                    .filter-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid #ddd; background: #fff; font-size: 13px; font-family: 'Noto Sans Thai', sans-serif; cursor: pointer; white-space: nowrap; }
+                    .filter-btn.active { background: #2C3E50; color: #fff; border-color: #2C3E50; }
+                    .liff-btn { display: block; width: 100%; padding: 14px; background: #2ECC71; color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; font-family: 'Noto Sans Thai', sans-serif; cursor: pointer; text-align: center; text-decoration: none; }
+                </style>
+            </head>
+            <body>
+                <div class="liff-container">
+                    <div class="liff-header">
+                        <h2>เอกสารของฉัน</h2>
+                    </div>
+
+                    <div class="filter-bar" id="filter-bar">
+                        <button class="filter-btn active" data-filter="all">ทั้งหมด</button>
+                        <button class="filter-btn" data-filter="draft">ร่าง</button>
+                        <button class="filter-btn" data-filter="sent_to_client">ส่งลูกค้า</button>
+                        <button class="filter-btn" data-filter="final">สมบูรณ์</button>
+                        <button class="filter-btn" data-filter="signed">ลงนาม</button>
+                        <button class="filter-btn" data-filter="expired">หมดอายุ</button>
+                    </div>
+
+                    <div id="doc-list"></div>
+                    <div id="doc-empty" class="doc-empty" style="display:none;">ไม่มีเอกสาร</div>
+
+                    <div style="margin-top:24px;">
+                        <a class="liff-btn" href="/liff/document/create" style="margin-bottom:10px;">สร้างเอกสารใหม่</a>
+                    </div>
+                </div>
+                <script>
+var STATE_COLORS = {
+    generating:'#f39c12', draft:'#3498db', sent_to_client:'#9b59b6',
+    revision:'#e67e22', final:'#2ecc71', signed:'#27ae60',
+    cancelled:'#95a5a6', expired:'#bdc3c7'
+};
+var allDocs = [];
+var currentFilter = 'all';
+
+function loadDocs() {
+    var uid = '';
+    try {
+        if (window.liff) uid = liff.getDecodedIDToken().sub || '';
+    } catch(e) {}
+    fetch('/liff/documents/data', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({jsonrpc:'2.0', method:'call', params:{line_user_id: uid}})
+    })
+    .then(function(r){return r.json();})
+    .then(function(j){
+        allDocs = (j.result || {}).documents || [];
+        renderDocs();
+    });
+}
+
+function renderDocs() {
+    var list = document.getElementById('doc-list');
+    var empty = document.getElementById('doc-empty');
+    var filtered = currentFilter === 'all' ? allDocs : allDocs.filter(function(d){return d.state === currentFilter;});
+    if (!filtered.length) {
+        list.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+    }
+    empty.style.display = 'none';
+    list.innerHTML = filtered.map(function(d) {
+        var bg = STATE_COLORS[d.state] || '#999';
+        return '<a class="doc-card" href="/liff/document/draft/' + d.id + '">'
+            + '<div class="doc-title">' + esc(d.name)
+            + '<span class="doc-badge" style="background:' + bg + ';">' + esc(d.state_label) + '</span>'
+            + '</div>'
+            + '<div class="doc-meta">'
+            + (d.template_name ? esc(d.template_name) + ' · ' : '')
+            + esc(d.create_date)
+            + (d.revision_count > 0 ? ' · แก้ไข ' + d.revision_count + ' ครั้ง' : '')
+            + '</div></a>';
+    }).join('');
+}
+
+function esc(s) {
+    if (!s) return '';
+    var d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+}
+
+document.getElementById('filter-bar').addEventListener('click', function(e) {
+    var btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    renderDocs();
+});
+
+loadDocs();
+                </script>
+            </body>
+        </html>
     </template>
 
 </odoo>

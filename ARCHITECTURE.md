@@ -55,7 +55,8 @@
 │     ├── legal_advisor                        │
 │     ├── doc_drafter                          │
 │     ├── intake_analyst                       │
-│     └── ocr_legal_doc (OCR + metadata)       │
+│     ├── ocr_legal_doc (OCR + metadata)       │
+│     └── case_strategist (แนวคดี + แผนต่อสู้)  │
 │                                              │
 │   RAG Tool ←─────────────────────────┐       │
 └──────────────────────────────────────┤       │
@@ -179,6 +180,92 @@
 | **doc_drafter** | Draft สัญญา / เอกสาร | rag_search, write_file |
 | **intake_analyst** | วิเคราะห์คดี + สรุป | rag_search, odoo_create_lead |
 | **ocr_legal_doc** | OCR รูปถ่าย → ดึง metadata → จัด format | ocr_image, rag_index |
+| **case_strategist** | วิเคราะห์มุมต่อสู้, ประเมินโอกาสชนะ, วางแผนคดี | rag_search, read_file |
+
+---
+
+## Document Sync (Resilio Sync)
+
+ใช้ Resilio Sync (P2P) สำหรับ sync เอกสารคดีระหว่างเครื่องทนาย ↔ Platform server
+ไม่เพิ่ม service ใหม่ — Resilio Client ติดตั้งบน server + เครื่องทนายแต่ละคน
+
+```
+ทนาย A (PC)              ทนาย B (PC)              Platform Server
+Resilio Client            Resilio Client            Resilio Client
+~/cases/2566-0042/        ~/cases/2566-0042/        /data/cases/2566-0042/
+     │                         │                         │
+     └──────── P2P Sync (AES-128 encrypted) ─────────────┘
+                                                         │
+                                                    Resilio API
+                                                    (file event)
+                                                         │
+                                                         ▼
+                                                  Odoo controller
+                                                  POST /case/file-event
+                                                         │
+                                                         ▼
+                                                  adkcode
+                                                  case_strategist
+```
+
+### Case Folder Structure
+
+```
+cases/{case_id}/
+├── _ai/                    ← AI เขียนอัตโนมัติ (sync กลับไปเครื่องทนาย)
+│   ├── case_summary.md     ← สรุปคดีภาพรวม (อัปเดตเมื่อมีเอกสารใหม่)
+│   ├── strategy.md         ← แนวคดี + มุมต่อสู้ + โอกาสชนะ
+│   ├── document_index.json ← รายการเอกสาร + สรุปแต่ละชิ้น
+│   └── related_dika.md     ← ฎีกาที่เกี่ยวข้อง (ค้นจาก RAG)
+│
+├── intake/                 ← เอกสารจากลูกค้า
+├── evidence/               ← พยานหลักฐาน
+├── drafts/                 ← ร่างเอกสาร (ทนายหรือ AI สร้าง)
+└── correspondence/         ← หนังสือโต้ตอบ
+```
+
+### Sync Flow
+
+```
+1. ทนายลากไฟล์ใส่ ~/cases/{case_id}/intake/
+2. Resilio sync → server + ทนายคนอื่นในทีม
+3. Resilio API (file event) → Odoo controller
+4. Odoo → adkcode: OCR/อ่านเอกสาร → สรุป → อัปเดต _ai/
+5. _ai/ folder sync กลับ → ทนายเปิดอ่านได้ทันที
+6. LINE push → "เอกสารใหม่ในคดี #2566-0042 — AI อัปเดตแนวคดีแล้ว"
+```
+
+### Selective Sync
+
+ทนายแต่ละคน sync เฉพาะคดีที่รับผิดชอบ (Resilio Selective Sync)
+access control จัดการผ่าน Odoo (collaborator_ids ใน legal_case)
+
+---
+
+## Data Flow: กำหนดแนวคดี (Case Strategy)
+
+### วิธี A: Event-driven (เอกสารใหม่เข้ามา)
+
+```
+1. ทนายใส่เอกสารใน folder คดี
+2. Resilio sync → server
+3. Resilio API → Odoo → adkcode case_strategist
+4. AI อ่านเอกสารทั้งหมดในคดี
+5. ค้น RAG → หามาตรา/ฎีกาที่เกี่ยวข้อง
+6. อัปเดต _ai/strategy.md + _ai/related_dika.md
+7. sync กลับ → ทนายเปิดอ่านได้ + LINE push แจ้ง
+```
+
+### วิธี B: ทนายสั่งวิเคราะห์ (On-demand)
+
+```
+1. ทนายกด [วิเคราะห์แนวคดี] ใน LIFF /liff/cases หรือ Odoo backend
+2. Odoo → adkcode case_strategist
+3. AI อ่านเอกสารทั้งหมด + ค้น RAG
+4. แสดงผล: มุมต่อสู้ 2-4 มุม + โอกาสชนะ + ฎีกาอ้างอิง
+5. ทนายเลือกแนวคดี → AI สร้าง Litigation Plan
+6. บันทึกลง Odoo + เขียน _ai/strategy.md
+```
 
 ---
 

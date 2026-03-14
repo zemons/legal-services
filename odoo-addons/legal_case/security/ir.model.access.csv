@@ -3,3 +3,6 @@ access_legal_court_user,legal.court.user,model_legal_court,sales_team.group_sale
 access_legal_court_manager,legal.court.manager,model_legal_court,sales_team.group_sale_manager,1,1,1,1
 access_legal_court_date_user,legal.court.date.user,model_legal_court_date,sales_team.group_sale_salesman,1,1,1,0
 access_legal_court_date_manager,legal.court.date.manager,model_legal_court_date,sales_team.group_sale_manager,1,1,1,1
+access_legal_case_event_user,legal.case.event.user,model_legal_case_event,sales_team.group_sale_salesman,1,1,1,0
+access_legal_case_event_manager,legal.case.event.manager,model_legal_case_event,sales_team.group_sale_manager,1,1,1,1
+access_legal_case_event_public,legal.case.event.public,model_legal_case_event,base.group_public,1,0,0,0

@@ -1,17 +1,24 @@
 # Roadmap
 
 ## Phase 1 — RAG Core
-- [ ] ดัดแปลง `adkcode/rag.py` รองรับ PDF เอกสารกฎหมาย
-- [ ] PDF text extraction (pdfplumber)
-- [ ] Metadata tagging (ประเภท, เลขคดี, ปี, ศาล)
-- [ ] Legal document chunking strategy
-- [ ] ทดสอบ search คุณภาพกับเอกสารจริง
-- [ ] ตอบคำถาม RAG_QUESTIONS.md
+- [x] ดัดแปลง `adkcode/rag.py` รองรับ PDF เอกสารกฎหมาย
+- [x] PDF text extraction (pdfplumber)
+- [x] Legal document chunking strategy (แบ่งตามมาตรา/ส่วน)
+- [x] YAML frontmatter parser — อ่าน/เขียน metadata ในรูปแบบ YAML frontmatter
+- [x] Metadata tagging — ฎีกา: ประเภท, เลขคดี, ปี, ศาล, result, legal_basis, key_facts, ruling_principle
+- [x] Metadata tagging — กฎหมาย/ระเบียบ: ประเภท, เลขมาตรา, หมวด, วันบังคับใช้
+- [x] แยก collections: dika, statute, regulation, contract, firm, strategy_patterns
+- [x] สร้างโครงสร้าง `data/knowledge/` + ตัวอย่างเอกสาร (ฎีกา, กฎหมาย อย่างละ 2-3 ฉบับ)
+- [x] สร้าง strategy_patterns collection schema (เตรียมโครงสร้างรอ Phase 2)
+- [x] Similarity search by key_facts — ค้นฎีกาจากข้อเท็จจริงที่คล้ายกัน
+- [ ] ทดสอบ search คุณภาพกับเอกสารจริง (ทั้ง keyword + semantic) ← ต้องรอ GOOGLE_API_KEY + เอกสารจริง
+- [x] ตอบคำถาม RAG_QUESTIONS.md
 
 ## Phase 2 — Legal Agents
-- [ ] สร้าง agents ใหม่: legal_advisor, doc_drafter, intake_analyst, ocr_legal_doc
-- [ ] สร้าง `plugins/legal/` พร้อม SKILL.md
-- [ ] ทดสอบ chat กับ adkcode web UI
+- [x] สร้าง agents ใหม่: legal_advisor, doc_drafter, intake_analyst, ocr_legal_doc, case_strategist
+- [x] สร้าง `plugins/legal/` พร้อม SKILL.md + commands
+- [x] case_strategist: IRAC reasoning chain + strategy_patterns lookup + feedback loop
+- [ ] ทดสอบ chat กับ adkcode web UI ← ต้องรอ GOOGLE_API_KEY + install google-adk
 
 ## Phase 3 — LINE Bot (Odoo controller)
 - [ ] LINE webhook controller ใน `line_integration` module
@@ -35,7 +42,15 @@
 - [ ] Billing / invoice
 - [ ] Lawyer case dashboard (LIFF page)
 
-## Phase 6 — Production
+## Phase 6 — Document Sync (Resilio)
+- [ ] ติดตั้ง Resilio Sync บน server + ทดสอบกับเครื่อง client
+- [ ] Case folder structure: _ai/, intake/, evidence/, drafts/, correspondence/
+- [ ] Resilio API → Odoo file-event controller (event-driven)
+- [ ] AI Watch: เอกสารใหม่ → adkcode อ่าน/สรุป → อัปเดต _ai/ folder
+- [ ] Selective Sync ตาม collaborator_ids ใน legal_case
+- [ ] LINE push แจ้งทนายเมื่อ AI อัปเดตแนวคดี
+
+## Phase 7 — Production
 - [ ] Docker Compose setup (Odoo + adkcode)
 - [ ] Auth / security
 - [ ] Multi-user support
@@ -43,9 +58,11 @@
 
 ---
 
-## Pending Decisions (ดู RAG_QUESTIONS.md)
+## Decisions Made (ดู RAG_QUESTIONS.md)
 
-- Embedding model: Gemini vs OpenAI
-- Vector storage: JSON file vs Qdrant
-- Document metadata schema
-- Template เอกสาร: หา template คำร้อง / สัญญา มาเก็บใน RAG
+- ✅ Embedding model: **Gemini** (gemini-embedding-001, 768-dim)
+- ✅ Vector storage: **JSON file** (แยกต่อ collection, อัปเกรด Qdrant เมื่อเกิน 10k chunks)
+- ✅ Document metadata schema: **YAML frontmatter** (ดู RAG_QUESTIONS.md #3)
+- ✅ Chunking strategy: **แบ่งตามโครงสร้างเอกสาร** ไม่ใช่ตามจำนวนบรรทัด
+- ✅ Collection architecture: **แยก index file ต่อ collection**
+- ✅ Template เอกสาร: **ทนายเขียน/รวบรวม** เก็บใน `data/templates/`

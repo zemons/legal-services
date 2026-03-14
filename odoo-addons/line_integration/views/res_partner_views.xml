@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- Partner form: add LINE fields -->
     <record id="res_partner_view_form_line" model="ir.ui.view">
         <field name="name">res.partner.form.line</field>
         <field name="model">res.partner</field>
@@ -8,8 +9,82 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='phone']" position="after">
                 <field name="line_user_id"/>
+                <field name="line_role"/>
+                <field name="line_display_name"/>
+                <field name="line_picture_url" widget="url"/>
             </xpath>
         </field>
+    </record>
+
+    <!-- LINE Users list view -->
+    <record id="res_partner_view_tree_line_users" model="ir.ui.view">
+        <field name="name">res.partner.tree.line.users</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="line_picture_url" widget="image_url" string="Photo" options="{'size': [40,40]}"/>
+                <field name="name"/>
+                <field name="line_display_name"/>
+                <field name="line_role" widget="badge"
+                       decoration-info="line_role == 'client'"
+                       decoration-success="line_role == 'lawyer'"/>
+                <field name="line_user_id"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="create_date" string="Joined"/>
+                <button name="action_set_lawyer" type="object"
+                        string="Set Lawyer"
+                        class="btn-success"
+                        icon="fa-gavel"
+                        invisible="line_role == 'lawyer'"/>
+                <button name="action_set_client" type="object"
+                        string="Set Client"
+                        class="btn-secondary"
+                        icon="fa-user"
+                        invisible="line_role != 'lawyer'"
+                        confirm="เปลี่ยนกลับเป็นลูกค้า?"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- LINE Users search view -->
+    <record id="res_partner_view_search_line_users" model="ir.ui.view">
+        <field name="name">res.partner.search.line.users</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="line_display_name"/>
+                <field name="line_user_id"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <filter name="filter_client" string="Client"
+                        domain="[('line_role', '=', 'client')]"/>
+                <filter name="filter_lawyer" string="Lawyer"
+                        domain="[('line_role', '=', 'lawyer')]"/>
+                <separator/>
+                <filter name="filter_today" string="Today"
+                        domain="[('create_date', '&gt;=', (context_today()).strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_week" string="This Week"
+                        domain="[('create_date', '&gt;=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_role" string="Role" context="{'group_by': 'line_role'}"/>
+                    <filter name="group_date" string="Join Date" context="{'group_by': 'create_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action: LINE Users -->
+    <record id="action_line_users" model="ir.actions.act_window">
+        <field name="name">LINE Users</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('line_user_id', '!=', False)]</field>
+        <field name="context">{'default_line_role': 'client'}</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('res_partner_view_tree_line_users')})]"/>
+        <field name="search_view_id" ref="res_partner_view_search_line_users"/>
     </record>
 
 </odoo>

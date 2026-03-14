@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ─── Tree View ─────────────────────────────────────────── -->
+    <record id="view_legal_document_template_tree" model="ir.ui.view">
+        <field name="name">legal.document.template.tree</field>
+        <field name="model">legal.document.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category"/>
+                <field name="processing_state" widget="badge"
+                       decoration-info="processing_state == 'uploaded'"
+                       decoration-warning="processing_state == 'processing'"
+                       decoration-success="processing_state == 'ready'"
+                       decoration-danger="processing_state == 'error'"/>
+                <field name="required_fields_count" string="Fields"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ─── Form View ─────────────────────────────────────────── -->
+    <record id="view_legal_document_template_form" model="ir.ui.view">
+        <field name="name">legal.document.template.form</field>
+        <field name="model">legal.document.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_ai_analyze" type="object"
+                            string="AI วิเคราะห์" class="btn-primary"
+                            invisible="processing_state not in ('uploaded', 'error', 'ready')"
+                            confirm="AI จะวิเคราะห์เอกสารและสร้าง template ใหม่ ดำเนินการ?"/>
+                    <button name="action_reset_processing" type="object"
+                            string="ล้างผลวิเคราะห์" class="btn-warning"
+                            invisible="processing_state in ('none', 'uploaded')"
+                            confirm="ล้างผลวิเคราะห์ AI ทั้งหมด และเริ่มใหม่?"/>
+                    <field name="processing_state" widget="statusbar"
+                           statusbar_visible="none,uploaded,processing,ready"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="ชื่อ Template"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="category"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                            <field name="template_file_path" readonly="1"/>
+                            <field name="required_fields_count"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <!-- Tab 1: Upload & Process -->
+                        <page string="อัพโหลด &amp; AI วิเคราะห์" name="upload">
+                            <group>
+                                <group string="1. อัพโหลดไฟล์ต้นแบบ">
+                                    <field name="master_docx" filename="master_docx_filename"/>
+                                    <field name="master_docx_filename" invisible="1"/>
+                                </group>
+                                <group string="2. ไฟล์ Template (AI สร้าง)">
+                                    <field name="processed_docx" filename="processed_docx_filename" readonly="1"/>
+                                    <field name="processed_docx_filename" invisible="1"/>
+                                </group>
+                            </group>
+                            <group string="Log" invisible="not processing_log">
+                                <field name="processing_log" readonly="1" nolabel="1"
+                                       widget="text" cols="120"/>
+                            </group>
+                        </page>
+
+                        <!-- Tab 2: Template Fields -->
+                        <page string="Template Fields" name="fields">
+                            <field name="field_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="label"/>
+                                    <field name="field_type"/>
+                                    <field name="required"/>
+                                    <field name="options" optional="show"/>
+                                    <field name="show_when" optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- Tab 3: JSON (debug) -->
+                        <page string="JSON (Raw)" name="json_raw">
+                            <field name="required_fields" widget="ace" options="{'mode': 'json'}" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ─── Action ────────────────────────────────────────────── -->
+    <record id="action_legal_document_template" model="ir.actions.act_window">
+        <field name="name">Document Templates</field>
+        <field name="res_model">legal.document.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                สร้าง Template เอกสารใหม่
+            </p>
+            <p>อัพโหลดไฟล์ .docx ต้นแบบ แล้วให้ AI วิเคราะห์สร้าง template อัตโนมัติ</p>
+        </field>
+    </record>
+
+    <!-- ─── Menu ──────────────────────────────────────────────── -->
+    <menuitem id="menu_legal_liff_root"
+              name="Legal LIFF"
+              sequence="90"/>
+
+    <menuitem id="menu_legal_document_template"
+              name="Document Templates"
+              parent="menu_legal_liff_root"
+              action="action_legal_document_template"
+              sequence="10"/>
+
+</odoo>

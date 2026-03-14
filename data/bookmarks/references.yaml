@@ -1,0 +1,35 @@
+# References — เว็บอ้างอิงอื่นๆ
+
+- name: FormThai.com (Hypersoft)
+  url: http://formthai.com/lfpage/nameform_lf.html
+  status: bookmarked
+  notes: >
+    รายชื่อแบบฟอร์มจาก LawForm/HyperForm (โปรแกรมเก่า)
+    ใช้เป็น checklist ว่า template ครบหรือยัง
+
+- name: FormV97 — แบบพิมพ์ศาล
+  url: https://www.formv97.com/
+  status: bookmarked
+  notes: แบบพิมพ์ศาล .doc — อาจมีบางแบบที่ไม่มีจากแหล่งอื่น
+
+- name: thanaiphorn.com — ดาวน์โหลดแบบพิมพ์
+  url: https://www.thanaiphorn.com/download.php
+  status: bookmarked
+  notes: แบบพิมพ์ศาลยุติธรรมฟรี (Word)
+
+- name: siamlegalinter.com — รวมแบบฟอร์มศาล
+  url: https://siamlegalinter.com/แบบฟอร์มศาล/
+  status: downloaded_partial
+  notes: >
+    ดาวน์โหลดแล้ว: แรงงาน (17), ล้มละลาย (21), ปกครอง (9), ผู้บริโภค (21)
+    อาจมีหมวดอื่นเพิ่มเติม
+
+- name: lawyers.in.th — แบบพิมพ์ศาลปกครอง
+  url: https://www.lawyers.in.th/2020/01/09/แบบพิมพ์ศาลคดีปกครอง555/
+  status: bookmarked
+  notes: รวมแบบพิมพ์ศาลปกครอง (compiled 2020)
+
+- name: SmartLawTutor — แบบพิมพ์คดีผู้บริโภค
+  url: http://www.smartlawtutor.com/?p=4152
+  status: bookmarked
+  notes: แบบพิมพ์ศาลคดีผู้บริโภค A4

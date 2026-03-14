@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_legal_document_template_public,legal.document.template.public,model_legal_document_template,,1,0,0,0
+access_legal_document_template_user,legal.document.template.user,model_legal_document_template,base.group_user,1,1,1,1
+access_legal_document_template_field_public,legal.document.template.field.public,model_legal_document_template_field,,1,0,0,0
+access_legal_document_template_field_user,legal.document.template.field.user,model_legal_document_template_field,base.group_user,1,1,1,1
+access_legal_document_draft_public,legal.document.draft.public,model_legal_document_draft,,1,0,0,0
+access_legal_document_draft_user,legal.document.draft.user,model_legal_document_draft,base.group_user,1,1,1,1
+access_legal_clause_category_public,legal.clause.category.public,model_legal_clause_category,,1,0,0,0
+access_legal_clause_category_user,legal.clause.category.user,model_legal_clause_category,base.group_user,1,1,1,1
+access_legal_clause_public,legal.clause.public,model_legal_clause,,1,0,0,0
+access_legal_clause_user,legal.clause.user,model_legal_clause,base.group_user,1,1,1,1
+access_legal_document_version_public,legal.document.version.public,model_legal_document_version,,1,0,0,0
+access_legal_document_version_user,legal.document.version.user,model_legal_document_version,base.group_user,1,1,1,1

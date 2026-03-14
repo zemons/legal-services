@@ -20,7 +20,13 @@ dist/
 data/cases/
 data/knowledge/
 data/templates/
+data/templates-docx/
+data/legal_index/
 *.adkcode_index.json
+
+# External/unrelated projects
+botforge/
+botforge-/
 
 # Logs
 *.log
